@@ -4,7 +4,7 @@ import { Alert, Button, Loader, TextInput } from '@mantine/core'
 import { IconAlertTriangle, IconArrowRight } from '@tabler/icons-react'
 import Shell from '../components/Shell'
 import AnswerCard from './AnswerCard'
-import { api, RequestError } from '../api'
+import { api, IS_STATIC, RequestError } from '../api'
 import type { AnswerResult, Status } from '../types'
 
 const HISTORY_KEY = 'cairn-history'
@@ -98,7 +98,7 @@ export default function DeskPage({ active }: { active: boolean }) {
       <div className="cn-desk">
         <section className="cn-ask" aria-labelledby="desk-title">
           <h1 id="desk-title" className="cn-h1">{t('desk.title')}</h1>
-          <p className="lead">{t('desk.lead')}</p>
+          <p className="lead">{t(IS_STATIC ? 'desk.demoLead' : 'desk.lead')}</p>
           <form className="cn-card cn-askcard" onSubmit={submit}>
             <TextInput
               size="lg"
@@ -144,9 +144,11 @@ export default function DeskPage({ active }: { active: boolean }) {
           )}
           {error && !busy && (
             <Alert color="red" icon={<IconAlertTriangle aria-hidden />} title={t(`desk.errors.${error}`, { defaultValue: t('desk.errors.generic') })}>
-              <Button variant="default" size="sm" mt="sm" onClick={() => void ask(asked)}>
-                {t('desk.errors.retry')}
-              </Button>
+              {error !== 'static_demo' && (
+                <Button variant="default" size="sm" mt="sm" onClick={() => void ask(asked)}>
+                  {t('desk.errors.retry')}
+                </Button>
+              )}
             </Alert>
           )}
           {!result && !busy && !error && (

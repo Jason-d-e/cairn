@@ -4,6 +4,8 @@ A knowledge desk for WCAG 2.2. Ask in English or Chinese; the answer names the s
 
 An entry to LaunchPad Hacks 2026 by Jason Liang and ZIzi821.
 
+**Static demo:** https://jason-d-e.github.io/cairn/ shows the cover, the library, the evaluation and twelve real answers recorded on 9 November 2026. It has no server, so it cannot answer new questions; to ask your own, run Cairn on your machine (below).
+
 ## What it does
 
 - **Answers from the source.** The library is the W3C text of WCAG 2.2: 87 success criteria, 1006 passages from the normative text and the Understanding documents (commit `d1e0639` of [w3c/wcag](https://github.com/w3c/wcag)).
@@ -67,7 +69,7 @@ npm start                   # http://127.0.0.1:3100
 
 The first start downloads the two local models (about 130 MB and 280 MB) into `app/data/models`. The data files (`app/data/documents.json`, `chunks.json`, `index.json`) are included, so no ingestion is needed. To rebuild them from the W3C source, make a sparse clone of w3c/wcag into `corpus/wcag-src` and run `npm run ingest`.
 
-Other commands: `npm test` (the quote verifier, 12 tests), `npm run eval:retrieval` (the 40-question evaluation), `node scripts/smoke.js` (7 live questions), `node scripts/sample.js` (regenerates the answer shown on the cover from a real run).
+Other commands: `npm test` (the quote verifier, 12 tests), `npm run eval:retrieval` (the 40-question evaluation), `node scripts/smoke.js` (7 live questions), `node scripts/sample.js` (regenerates the answer shown on the cover from a real run), `node scripts/export-static.js` (records the data and answers the static demo serves), and in `web/`: `VITE_STATIC=1 VITE_BASE=/cairn/ VITE_OUT=dist-static npm run build:static` (builds the static demo).
 
 The key is read from `app/.env` only, never from the process environment, and never leaves the machine except in requests to the Anthropic API.
 

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Burger, Menu, SegmentedControl } from '@mantine/core'
 import { LANGS, setLang, type Lang } from '../i18n'
 import { useStatus } from '../status'
+import { IS_STATIC } from '../api'
 import type { Page } from '../App'
 import Logo from './Logo'
 
@@ -31,7 +32,7 @@ export default function Shell({ page, children }: { page: Page; children: ReactN
   const { t } = useTranslation()
   const { status, error } = useStatus()
   const [open, setOpen] = useState(false)
-  const model = error ? 'unreachable' : !status ? 'checking' : status.model_configured ? 'connected' : 'offline'
+  const model = IS_STATIC ? 'demo' : error ? 'unreachable' : !status ? 'checking' : status.model_configured ? 'connected' : 'offline'
 
   return (
     <div className="cn-app">

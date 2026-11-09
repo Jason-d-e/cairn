@@ -9,7 +9,7 @@ const zh: typeof en = {
     menu: '页面',
     scheme: { toDark: '切换到黑色配色', toLight: '切换到米白配色' },
     nav: { desk: '问答台', library: '资料库', quality: '检索评测', about: '关于' },
-    model: { checking: '正在检查模型…', connected: '模型已连接', offline: '模型未配置', unreachable: '无法连接服务器' },
+    model: { checking: '正在检查模型…', connected: '模型已连接', offline: '模型未配置', unreachable: '无法连接服务器', demo: '静态演示版' },
     caveat: '回答由语言模型根据 W3C 段落写成，每条引文在显示前都已与原文核对。采用前请阅读条款本身。',
     about: '关于 Cairn',
     license: 'W3C 原文依据 W3C 文档许可引用。',
@@ -17,6 +17,7 @@ const zh: typeof en = {
   desk: {
     title: '向指南提问',
     lead: '用中文或英文提问。回答会点名成功标准，并逐字引用原文。',
+    demoLead: '静态演示版：下面每个问题都是 2026 年 11 月 9 日真实系统的回答。要现场提问，请按 README 在自己电脑上运行。',
     label: '你的问题',
     placeholder: '例如：按钮至少要多大？',
     ask: '提问',
@@ -55,6 +56,7 @@ const zh: typeof en = {
     },
     facts: '关键信息',
     errors: {
+      static_demo: '静态演示版不能回答新问题。请选一个已回答的问题，或按 README 在自己电脑上运行。',
       model_not_configured: '模型未配置。请把密钥写入 app/.env 并重启服务器。',
       model_auth_failed: '模型服务拒绝了密钥，请检查 app/.env。',
       network: '无法连接服务器。',

@@ -7,7 +7,7 @@ const en = {
     menu: 'Pages',
     scheme: { toDark: 'Switch to the black colourway', toLight: 'Switch to the off-white colourway' },
     nav: { desk: 'Desk', library: 'Library', quality: 'Evaluation', about: 'About' },
-    model: { checking: 'Checking the model…', connected: 'Model connected', offline: 'Model not configured', unreachable: 'Server unreachable' },
+    model: { checking: 'Checking the model…', connected: 'Model connected', offline: 'Model not configured', unreachable: 'Server unreachable', demo: 'Static demo' },
     caveat: 'Answers are written by a language model from W3C passages, and every quote is checked against its source before it is shown. Read the criterion itself before you rely on it.',
     about: 'About Cairn',
     license: 'W3C text quoted under the W3C Document License.',
@@ -15,6 +15,7 @@ const en = {
   desk: {
     title: 'Ask the guidelines',
     lead: 'A question in English or Chinese. The answer names the success criterion and quotes it word for word.',
+    demoLead: 'Static demo: every question below was answered by the real system on 9 November 2026. To ask your own, run Cairn on your machine (see the README).',
     label: 'Your question',
     placeholder: 'For example: how big must a button be?',
     ask: 'Ask',
@@ -59,6 +60,7 @@ const en = {
     },
     facts: 'Key facts',
     errors: {
+      static_demo: 'This static demo cannot answer new questions. Pick one of the answered questions, or run Cairn on your machine (see the README).',
       model_not_configured: 'The model is not configured. Add the key to app/.env and restart the server.',
       model_auth_failed: 'The model service rejected the key. Check app/.env.',
       network: 'Could not reach the server.',

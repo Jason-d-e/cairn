@@ -17,7 +17,7 @@ const SHOTS = ['answer', 'quotes', 'trace', 'library'] as const
 type Lang = 'en' | 'zh'
 
 function shot(lang: string, name: string) {
-  return `/shots/${lang === 'zh' ? 'zh' : 'en'}/${name}.webp`
+  return `${import.meta.env.BASE_URL}shots/${lang === 'zh' ? 'zh' : 'en'}/${name}.webp`
 }
 
 /** Scrolls to a section on the cover without touching the hash router. */
