@@ -4,6 +4,7 @@ import type { AnswerResult, Quote } from '../types'
 import KeySentence from './KeySentence'
 import Facts from './Facts'
 import TracePanel from './TracePanel'
+import EmailCard from './EmailCard'
 import { bareTitle } from './format'
 
 export { bareTitle }
@@ -82,6 +83,7 @@ export default function AnswerCard({ question, result }: { question: string; res
         <p className="cn-status" data-status={result.status}>
           <Icon size={18} aria-hidden /> {t(`desk.status.${result.status}`)}
           {campus && <span className="cn-forcampus">{t('campus.answeredFor', { campus })}</span>}
+          <span className="cn-tag cn-engine-tag" data-ok={result.meta.engine !== 'local'}>{t(`engine.badge.${result.meta.engine ?? 'model'}`)}</span>
         </p>
       </header>
 
@@ -152,6 +154,8 @@ export default function AnswerCard({ question, result }: { question: string; res
           </div>
         </section>
       )}
+
+      {result.email && <EmailCard email={result.email} />}
 
       <TracePanel result={result} />
 

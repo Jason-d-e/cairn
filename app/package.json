@@ -12,7 +12,8 @@
     "ingest": "node scripts/ingest.js",
     "eval:retrieval": "node scripts/eval-retrieval.js",
     "test": "node --test",
-    "ingest:monash": "node scripts/ingest-monash.js"
+    "ingest:monash": "node scripts/ingest-monash.js",
+    "eval:local": "node scripts/eval-local.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.6.0",

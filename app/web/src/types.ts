@@ -3,6 +3,8 @@
 export type Status = 'answered' | 'not_covered' | 'needs_clarification' | 'withheld'
 /** A campus code the server knows; 'all' marks a page that applies at every campus. */
 export type CampusCode = 'all' | 'au' | 'my' | 'id'
+/** Who wrote the answer: the model (needs a key) or the local engine (sentences chosen by a local model, no API). */
+export type EngineName = 'model' | 'local'
 
 export interface ApiError {
   code: string
@@ -38,6 +40,7 @@ export interface StatusInfo {
   }
   campuses: Record<string, string>
   topics: Record<string, string>
+  engines?: Record<EngineName, boolean>
 }
 
 /** A quote the model gave, after the server looked for it in the passage it cites. */
@@ -96,6 +99,16 @@ export interface SourceDoc {
   url: string
 }
 
+/** The email the reader could send when the pages do not answer: a template, with a documented address when the pages give one. */
+export interface EmailDraft {
+  to: string
+  to_source: { source_id: string; title: string; url?: string } | null
+  subject: string
+  body: string
+  mailto: string
+  note: string
+}
+
 export interface AnswerResult {
   status: Status
   model_status: Exclude<Status, 'withheld'>
@@ -107,8 +120,10 @@ export interface AnswerResult {
   clarifying_question: string
   checks: { quotes_total: number; quotes_verified: number; withheld: boolean }
   trace: Trace
+  email?: EmailDraft
   meta: {
     prompt_version: string
+    engine?: EngineName
     campus: CampusCode | null
     corpus: string
     model_requested: string
@@ -118,6 +133,7 @@ export interface AnswerResult {
     retrieval_ms: number
     stop_reason: string
     usage: { input_tokens: number | null; output_tokens: number | null }
+    sentence_scores?: { id: string; score: number }[]
   }
 }
 

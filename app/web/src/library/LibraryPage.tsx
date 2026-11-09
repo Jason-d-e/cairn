@@ -97,7 +97,7 @@ export default function LibraryPage() {
         </div>
         {gaps && gaps.gaps.length === 0 && <p>{t('library.gaps.empty')}</p>}
         {gaps && gaps.gaps.length > 0 && (
-          <div className="cn-scroll" tabIndex={0} role="region" aria-label={t('library.gaps.title')}>
+          <div className="cn-scroll" tabIndex={0} role="region" aria-label={t('library.gaps.tableLabel')}>
             <table className="cn-table">
               <thead>
                 <tr>

@@ -31,6 +31,7 @@ const zh: typeof en = {
     placeholder: '例如：考试当天生病没去考，可以申请延期吗？',
     ask: '提问',
     asking: '正在查找原文并撰写回答…',
+    askingLocal: '正在查找原文并挑选句子…',
     examplesLabel: '试试这些',
     examples: [
       '考试当天生病没去考，可以申请延期考试吗？',
@@ -68,6 +69,7 @@ const zh: typeof en = {
       title: '可以问什么',
       text: '特殊考量与延期、考试延期、eExam、补考、退课、census date、学费退还、休学、残障支持服务（DSS）。回答先给结论和截止时间，再给它依据的 Monash 原句，已逐字核对。',
       link: '不熟悉这些词？先看它们是什么意思',
+      engines: '两种回答方式：AI 回答（Claude 根据段落写，需要密钥）和本地引擎（本地小模型挑出能回答的原句，不接任何接口，免费）。两者都逐字引用原页。',
     },
     facts: '关键信息',
     errors: {
@@ -81,6 +83,26 @@ const zh: typeof en = {
       generic: '出了点问题，请重试。',
       retry: '重试',
     },
+  },
+  engine: {
+    pick: '谁来写回答？',
+    names: { model: 'AI 回答', local: '本地引擎' },
+    hints: {
+      model: '由 Claude 根据检索到的段落写回答，服务器逐字核对每条引文。需要密钥，每题约千分之一美元。',
+      local: '不接任何模型接口：本地小模型挑出能回答的原句，逐字引用，再用模板加上页面和校区。免费、离线，但不会改写和归纳。',
+      noKey: '没有配置 API 密钥，所以由本地引擎回答。要用 AI 回答，把密钥写进 app/.env。',
+    },
+    badge: { model: 'AI 回答', local: '本地引擎' },
+  },
+  email: {
+    title: '写邮件问相关部门',
+    lead: '这些页面回答不了这个问题。下面是替你起草的邮件；页面里写了邮箱时，收件人已填好。',
+    to: '收件人',
+    subject: '主题',
+    noAddress: '这些页面里没有邮箱',
+    copy: '复制邮件',
+    copied: '已复制',
+    open: '用邮件程序打开',
   },
   trace: {
     summary: '{{candidates}} 个候选，保留 {{kept}} 个，{{total}} 条引文中 {{verified}} 条核对通过',
@@ -121,6 +143,7 @@ const zh: typeof en = {
       stats: '本台共收到 {{questions}} 个问题，已回答 {{answered}} 个',
       empty: '还没有记录到缺口。',
       heads: { question: '问题', asked: '被问次数', missing: '缺少的内容', last: '最近一次' },
+      tableLabel: '未回答问题表',
     },
   },
   quality: {
@@ -222,7 +245,7 @@ const zh: typeof en = {
       items: [
         { title: 'Node.js 22 或更新', text: '一个进程同时提供接口和页面。' },
         { title: '两个小型本地模型', text: 'multilingual-e5-small 和 bge-reranker-base，约 130 MB，在 CPU 上运行。' },
-        { title: '一个 Claude 密钥', text: 'Claude Haiku 5.5 只根据检索到的段落写回答，密钥留在本地。' },
+        { title: '一个 Claude 密钥，或者不要', text: '有密钥时，Claude Haiku 5.5 只根据检索到的段落写回答，密钥留在本地。没有密钥时，本地引擎用页面自己的原句回答。' },
         { title: '页面', text: '在你自己的浏览器里读取到一个文件夹，一条命令建索引；页面不在仓库里。换一个机构的规定：换一个文件夹，换一段提示词。' },
       ],
     },

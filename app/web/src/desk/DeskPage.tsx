@@ -4,15 +4,19 @@ import { Alert, Button, Loader, TextInput } from '@mantine/core'
 import { IconAlertTriangle, IconArrowRight } from '@tabler/icons-react'
 import Shell from '../components/Shell'
 import CampusPicker from '../components/CampusPicker'
+import EngineSwitch from '../components/EngineSwitch'
 import AnswerCard from './AnswerCard'
 import { api, IS_STATIC, RequestError } from '../api'
 import { getCampus, useCampus, type Campus } from '../campus'
+import { getEngine, useEngine, type Engine } from '../engine'
+import { useStatus } from '../status'
 import type { AnswerResult, Status } from '../types'
 
 const HISTORY_KEY = 'cairn-history'
 interface HistoryItem {
   q: string
   campus: Campus | null
+  engine?: Engine
   status: Status
   at: string
 }
@@ -34,10 +38,12 @@ function saveHistory(list: HistoryItem[]) {
   }
 }
 
-/** The desk: pick a campus, ask; the answer; the recent questions. */
+/** The desk: pick a campus and an engine, ask; the answer; the recent questions. */
 export default function DeskPage({ active }: { active: boolean }) {
   const { t } = useTranslation()
+  const { status } = useStatus()
   const [campus, setCampus] = useCampus()
+  const [engineChoice, setEngine] = useEngine()
   const [question, setQuestion] = useState('')
   const [asked, setAsked] = useState('')
   const [pending, setPending] = useState<string | null>(null) // a question waiting for a campus
@@ -49,7 +55,11 @@ export default function DeskPage({ active }: { active: boolean }) {
   const busyRef = useRef(false)
   const examples = t('desk.examples', { returnObjects: true }) as string[]
 
-  const ask = useCallback(async (q: string, c: Campus | null = getCampus()) => {
+  // The static demo recorded both engines; a live server offers the model only when it has a key.
+  const available: Record<Engine, boolean> = { model: IS_STATIC || !!status?.engines?.model, local: true }
+  const engine: Engine = engineChoice && available[engineChoice] ? engineChoice : available.model ? 'model' : 'local'
+
+  const ask = useCallback(async (q: string, c: Campus | null = getCampus(), e?: Engine) => {
     const text = q.trim()
     if (!text || busyRef.current) return
     setQuestion(text)
@@ -59,9 +69,10 @@ export default function DeskPage({ active }: { active: boolean }) {
       setPending(text)
       return
     }
+    const eng: Engine = e ?? getEngine() ?? 'model'
     setPending(null)
     setAsked(text)
-    const key = `${c}|${text}`
+    const key = `${eng}|${c}|${text}`
     const known = answers.current.get(key)
     if (known) {
       setResult(known)
@@ -71,16 +82,16 @@ export default function DeskPage({ active }: { active: boolean }) {
     setBusy(true)
     setResult(null)
     try {
-      const r = await api.ask(text, c)
+      const r = await api.ask(text, c, eng)
       answers.current.set(key, r)
       setResult(r)
       setHistory((h) => {
-        const next = [{ q: text, campus: c, status: r.status, at: new Date().toISOString() }, ...h.filter((x) => !(x.q === text && x.campus === c))].slice(0, 8)
+        const next = [{ q: text, campus: c, engine: eng, status: r.status, at: new Date().toISOString() }, ...h.filter((x) => !(x.q === text && x.campus === c && (x.engine ?? 'model') === eng))].slice(0, 8)
         saveHistory(next)
         return next
       })
-    } catch (e) {
-      setError(e instanceof RequestError ? e.info.code : 'generic')
+    } catch (err) {
+      setError(err instanceof RequestError ? err.info.code : 'generic')
     } finally {
       busyRef.current = false
       setBusy(false)
@@ -89,7 +100,12 @@ export default function DeskPage({ active }: { active: boolean }) {
 
   const chooseCampus = (c: Campus) => {
     setCampus(c)
-    if (pending) void ask(pending, c)
+    if (pending) void ask(pending, c, engine)
+  }
+  const chooseEngine = (e: Engine) => {
+    setEngine(e)
+    // The same question again, by the other engine, so the two can be compared.
+    if (asked && campus && !busy) void ask(asked, campus, e)
   }
 
   // '#/ask?q=…' from the cover (or typed in): ask it, then drop the query so a reload does not ask again.
@@ -100,12 +116,12 @@ export default function DeskPage({ active }: { active: boolean }) {
       const m = window.location.hash.match(/^#\/?ask\?(?:.*&)?q=([^&]+)/)
       if (!m) return
       window.history.replaceState(null, '', '#/ask')
-      void ask(decodeURIComponent(m[1].replace(/\+/g, ' ')))
+      void ask(decodeURIComponent(m[1].replace(/\+/g, ' ')), getCampus(), engine)
     }
     check()
     window.addEventListener('hashchange', check)
     return () => window.removeEventListener('hashchange', check)
-  }, [active, ask])
+  }, [active, ask, engine])
 
   useEffect(() => {
     if (active) document.title = `${t('app.nav.desk')} · Cairn`
@@ -113,7 +129,7 @@ export default function DeskPage({ active }: { active: boolean }) {
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
-    void ask(question)
+    void ask(question, getCampus(), engine)
   }
 
   return (
@@ -124,6 +140,7 @@ export default function DeskPage({ active }: { active: boolean }) {
           <p className="lead">{t(IS_STATIC ? 'desk.demoLead' : 'desk.lead')}</p>
           <form className="cn-card cn-askcard" onSubmit={submit}>
             <CampusPicker value={campus} onChange={chooseCampus} name="campus-desk" hint={!campus} />
+            <EngineSwitch value={engine} onChange={chooseEngine} name="engine-desk" available={available} hint={!result} />
             <div className="cn-askrow">
               <TextInput
                 size="lg"
@@ -150,7 +167,7 @@ export default function DeskPage({ active }: { active: boolean }) {
             <ul>
               {examples.map((q) => (
                 <li key={q}>
-                  <button type="button" className="cn-chip" onClick={() => void ask(q)} disabled={busy}>
+                  <button type="button" className="cn-chip" onClick={() => void ask(q, getCampus(), engine)} disabled={busy}>
                     {q}
                   </button>
                 </li>
@@ -168,13 +185,13 @@ export default function DeskPage({ active }: { active: boolean }) {
           </p>
           {busy && (
             <p className="cn-busy">
-              <Loader size="sm" /> {t('desk.asking')}
+              <Loader size="sm" /> {t(engine === 'local' ? 'desk.askingLocal' : 'desk.asking')}
             </p>
           )}
           {error && !busy && (
             <Alert color="red" icon={<IconAlertTriangle aria-hidden />} title={t(`desk.errors.${error}`, { defaultValue: t('desk.errors.generic') })}>
               {error !== 'static_demo' && (
-                <Button variant="default" size="sm" mt="sm" onClick={() => void ask(asked)}>
+                <Button variant="default" size="sm" mt="sm" onClick={() => void ask(asked, getCampus(), engine)}>
                   {t('desk.errors.retry')}
                 </Button>
               )}
@@ -184,6 +201,7 @@ export default function DeskPage({ active }: { active: boolean }) {
             <section className="cn-card cn-intro" aria-labelledby="intro-title">
               <h2 id="intro-title" className="cn-h3">{t('desk.intro.title')}</h2>
               <p>{t('desk.intro.text')}</p>
+              <p>{t('desk.intro.engines')}</p>
               <a className="cn-link" href="#/?s=what">{t('desk.intro.link')}</a>
             </section>
           )}
@@ -197,12 +215,17 @@ export default function DeskPage({ active }: { active: boolean }) {
           ) : (
             <ul>
               {history.map((h) => (
-                <li key={`${h.campus}|${h.q}`}>
-                  <button type="button" className="cn-hist" aria-current={h.q === asked && h.campus === campus ? 'true' : undefined} onClick={() => void ask(h.q, h.campus ?? getCampus())}>
+                <li key={`${h.engine ?? 'model'}|${h.campus}|${h.q}`}>
+                  <button
+                    type="button"
+                    className="cn-hist"
+                    aria-current={h.q === asked && h.campus === campus && (h.engine ?? 'model') === engine ? 'true' : undefined}
+                    onClick={() => void ask(h.q, h.campus ?? getCampus(), h.engine ?? engine)}
+                  >
                     <span>{h.q}</span>
                     <span className="small">
                       {h.campus ? `${t(`campus.names.${h.campus}`)} · ` : ''}
-                      {t(`desk.status.${h.status}`)}
+                      {t(`engine.badge.${h.engine ?? 'model'}`)} · {t(`desk.status.${h.status}`)}
                     </span>
                   </button>
                 </li>

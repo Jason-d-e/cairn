@@ -29,6 +29,7 @@ const en = {
     placeholder: 'For example: can I defer my exam if I was sick on the day?',
     ask: 'Ask',
     asking: 'Finding the passages and writing the answer…',
+    askingLocal: 'Finding the passages and choosing the sentences…',
     examplesLabel: 'Try one',
     examples: [
       'I was sick on the day of my exam. Can I defer it?',
@@ -66,6 +67,7 @@ const en = {
       title: 'What you can ask',
       text: 'Special consideration and extensions, deferring an exam, eExams, supplementary assessments, withdrawing from a unit, census dates, fee reversal, intermission, Disability Support Services. The answer gives the bottom line first, with its deadline, then the Monash sentence it rests on, checked word for word.',
       link: 'New to these terms? Read what they mean',
+      engines: 'Two ways to answer: the AI answer (Claude writes from the passages; needs a key) and the local engine (a local model picks the sentences that answer; no API, free). Both quote the pages word for word.',
     },
     facts: 'Key facts',
     errors: {
@@ -79,6 +81,26 @@ const en = {
       generic: 'Something went wrong. Try again.',
       retry: 'Try again',
     },
+  },
+  engine: {
+    pick: 'Who writes the answer?',
+    names: { model: 'AI answer', local: 'Local engine' },
+    hints: {
+      model: 'Claude writes the answer from the retrieved passages and the server checks every quote. Needs a key; about a tenth of a cent per question.',
+      local: 'No model API: a local model picks the sentences that answer, quoted word for word, and templates add the page and campus. Free and offline, but it cannot rephrase or combine.',
+      noKey: 'No API key is configured, so the local engine answers. Add a key to app/.env for AI answers.',
+    },
+    badge: { model: 'AI answer', local: 'Local engine' },
+  },
+  email: {
+    title: 'Ask the department',
+    lead: 'The pages do not answer this. Here is an email you can send; when the pages give an address, it is filled in.',
+    to: 'To',
+    subject: 'Subject',
+    noAddress: 'No address on these pages',
+    copy: 'Copy the email',
+    copied: 'Copied',
+    open: 'Open in mail app',
   },
   trace: {
     summary: '{{candidates}} candidates, {{kept}} kept, {{verified}} of {{total}} quotes verified',
@@ -119,6 +141,7 @@ const en = {
       stats: '{{questions}} questions asked at this desk, {{answered}} answered',
       empty: 'No gaps recorded yet.',
       heads: { question: 'Question', asked: 'Times asked', missing: 'What was missing', last: 'Last asked' },
+      tableLabel: 'Table of unanswered questions',
     },
   },
   quality: {
@@ -220,7 +243,7 @@ const en = {
       items: [
         { title: 'Node.js 22 or newer', text: 'One process serves the API and the pages.' },
         { title: 'Two small local models', text: 'multilingual-e5-small and bge-reranker-base, about 130 MB, on the CPU.' },
-        { title: 'One Claude key', text: 'Claude Haiku 5.5 writes from the retrieved passages only. The key stays local.' },
+        { title: 'A Claude key, or none', text: 'With a key, Claude Haiku 5.5 writes from the retrieved passages only; the key stays local. Without one, the local engine answers with the pages’ own sentences.' },
         { title: 'The pages', text: 'Read in your own browser into one folder and indexed with one command; they are not in the repository. Another organisation’s rules: another folder and another prompt.' },
       ],
     },

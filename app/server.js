@@ -4,6 +4,8 @@ import express from 'express'
 import { APP_DIR, config, modelConfigured } from './lib/config.js'
 import { loadKnowledge, findContext, RETRIEVAL } from './lib/pipeline.js'
 import { answerQuestion, describeError } from './lib/answer.js'
+import { answerLocally } from './lib/local.js'
+import { draftEmail } from './lib/email.js'
 import { logRun, readRuns } from './lib/runlog.js'
 import { EMBED_MODEL } from './lib/embed.js'
 import { RERANK_MODEL } from './lib/rerank.js'
@@ -33,6 +35,8 @@ app.get('/api/status', (req, res) => {
     retrieval: { ...RETRIEVAL, embed_model: EMBED_MODEL, rerank_model: RERANK_MODEL, chunk_size: kb.meta.chunk_size, chunk_overlap: kb.meta.chunk_overlap },
     campuses: kb.meta.campuses ?? {},
     topics: kb.meta.topics ?? {},
+    // Two ways to answer: the model (needs a key) and the local engine (sentences chosen by a local model, no API).
+    engines: { model: modelConfigured(), local: true },
   })
 })
 
@@ -55,13 +59,21 @@ app.get('/api/search', async (req, res, next) => {
 app.post('/api/ask', async (req, res) => {
   const question = String(req.body?.question ?? '').trim()
   const campus = campusOf(req.body?.campus)
+  // Without a key every question goes to the local engine; with one, the reader chooses.
+  const engine = !modelConfigured() || req.body?.engine === 'local' ? 'local' : 'model'
   if (!question || question.length > 500) return res.status(400).json({ error: { code: 'bad_question', message: 'Ask a question of 1 to 500 characters.' } })
   if (limited(req.ip)) return res.status(429).json({ error: { code: 'rate_limited', message: 'Too many questions in a minute. Wait a moment.', retryable: true } })
-  if (!modelConfigured()) return res.status(503).json({ error: { code: 'model_not_configured', message: 'Add ANTHROPIC_API_KEY to app/.env and restart.', retryable: false } })
   try {
-    const result = await answerQuestion(kb, question, { campus })
+    const result = engine === 'local' ? await answerLocally(kb, question, { campus }) : await answerQuestion(kb, question, { campus })
+    // No answer from the pages: draft the email the reader would send to ask, from the pages and their documented contacts.
+    if (result.status === 'not_covered' || result.status === 'withheld') {
+      const campusName = campus ? kb.meta.campuses?.[campus] ?? campus : ''
+      const context = result.trace.chunks.map((c) => kb.chunkById.get(c.id)).filter(Boolean)
+      // The local engine's explanation of itself does not belong in a letter; the model's note on what is missing does.
+      result.email = draftEmail({ question, campus, campusName, missing_info: engine === 'model' ? result.missing_info : '', context })
+    }
     logRun({
-      source: req.get('x-cairn-source') === 'eval' ? 'eval' : 'web', question, campus: campus ?? null, status: result.status, model_status: result.model_status,
+      source: req.get('x-cairn-source') === 'eval' ? 'eval' : 'web', question, campus: campus ?? null, engine, status: result.status, model_status: result.model_status,
       checks: result.checks, criteria: result.criteria.map((c) => c.id), missing_info: result.missing_info,
       retrieved: result.trace.chunks.map((c) => c.id), ...result.meta,
     })

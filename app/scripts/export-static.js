@@ -1,6 +1,7 @@
 // Writes the data the static demo (GitHub Pages) serves instead of the API: the status, library, gaps and
 // evaluation JSON, plus one real answer per example question and campus. Every answer is a genuine run against
 // the running server, dated, never edited by hand. The answers carry short excerpts of the pages, as the desk shows them.
+// Both engines are recorded for every question: the model's answer and the local engine's (no model call).
 // Usage: node scripts/export-static.js   (the server must be running with a model key; about 14 model calls)
 import fs from 'node:fs'
 import path from 'node:path'
@@ -37,8 +38,8 @@ async function get(p) {
   if (!r.ok) throw new Error(`${p}: ${r.status}`)
   return r.json()
 }
-async function ask(question, campus) {
-  const r = await fetch(`${BASE}/api/ask`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-cairn-source': 'eval' }, body: JSON.stringify({ question, campus }) })
+async function ask(question, campus, engine) {
+  const r = await fetch(`${BASE}/api/ask`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-cairn-source': 'eval' }, body: JSON.stringify({ question, campus, engine }) })
   const body = await r.json()
   if (!r.ok) throw new Error(`${question}: ${r.status} ${body.error?.message}`)
   return body
@@ -65,15 +66,17 @@ const index = { generated: new Date().toLocaleDateString('sv-SE'), model: status
 let n = 0
 for (const { campus, lang, q } of QUESTIONS) {
   n += 1
-  const result = await ask(q, campus)
-  // The stored answer keeps the quotes (short, verified) but not the whole passages behind "Show the passage":
-  // the pages are not ours to republish, so the public demo carries excerpts only.
-  const trim = (list) => list.map(({ source_text, span, ...rest }) => rest)
-  const slim = { ...result, points: trim(result.points), citations: trim(result.citations) }
-  const file = `answers/${campus}-${lang}-${n}.json`
-  write(file, slim)
-  index.questions.push({ q, key: keyOf(q), lang, campus, file, status: result.status, verified: result.checks.quotes_verified, total: result.checks.quotes_total })
-  console.log(`  ${campus} ${lang} ${result.status} ${result.checks.quotes_verified}/${result.checks.quotes_total} - ${q}`)
+  for (const engine of ['model', 'local']) {
+    const result = await ask(q, campus, engine)
+    // The stored answer keeps the quotes (short, verified) but not the whole passages behind "Show the passage":
+    // the pages are not ours to republish, so the public demo carries excerpts only.
+    const trim = (list) => list.map(({ source_text, span, ...rest }) => rest)
+    const slim = { ...result, points: trim(result.points), citations: trim(result.citations) }
+    const file = `answers/${campus}-${lang}-${n}-${engine}.json`
+    write(file, slim)
+    index.questions.push({ q, key: keyOf(q), lang, campus, engine, file, status: result.status, verified: result.checks.quotes_verified, total: result.checks.quotes_total })
+    console.log(`  ${campus} ${lang} ${engine.padEnd(5)} ${result.status} ${result.checks.quotes_verified}/${result.checks.quotes_total} - ${q}`)
+  }
 }
 write('answers/index.json', index)
 console.log(`done: ${index.questions.length} answers, ${index.generated}`)
