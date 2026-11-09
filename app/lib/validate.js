@@ -37,7 +37,7 @@ export function verifyQuote({ source_id, quote }, chunkById) {
   const chunk = chunkById.get(source_id)
   const base = { source_id, quote }
   if (!chunk) return { ...base, verified: false, reason: 'unknown_source' }
-  const details = { doc: chunk.doc, title: chunk.title, section: chunk.section, level: chunk.level, url: chunk.url, source_text: chunk.text }
+  const details = { doc: chunk.doc, title: chunk.title, section: chunk.section, level: chunk.level ?? null, campus: chunk.campus ?? null, topic: chunk.topic ?? null, url: chunk.url, source_text: chunk.text }
   const q = normalizeForMatch(quote).replace(/[.\s]+$/, '')
   if (q.length < 3) return { ...base, ...details, verified: false, reason: 'empty_quote', span: null }
   if (!normalizeForMatch(chunk.text).includes(q)) return { ...base, ...details, verified: false, reason: 'quote_not_in_source', span: null }
@@ -73,7 +73,8 @@ export function checkAnswer(parsed, chunkById) {
   const verified = [...citations, ...points].filter((x) => x.verified)
   let status = parsed.status
   if (status === 'answered' && verified.length === 0) status = 'withheld'
-  const criteria = [...new Map(verified.map((v) => [v.doc, { id: v.doc, title: v.title, level: v.level }])).values()]
+  // The sources an answer rests on (one entry per page), taken from verified quotes only.
+  const criteria = [...new Map(verified.map((v) => [v.doc, { id: v.doc, title: v.title, level: v.level ?? null, campus: v.campus ?? null, topic: v.topic ?? null, url: v.url }])).values()]
   return {
     status,
     model_status: parsed.status,

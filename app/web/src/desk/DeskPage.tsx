@@ -3,13 +3,16 @@ import { useTranslation } from 'react-i18next'
 import { Alert, Button, Loader, TextInput } from '@mantine/core'
 import { IconAlertTriangle, IconArrowRight } from '@tabler/icons-react'
 import Shell from '../components/Shell'
+import CampusPicker from '../components/CampusPicker'
 import AnswerCard from './AnswerCard'
 import { api, IS_STATIC, RequestError } from '../api'
+import { getCampus, useCampus, type Campus } from '../campus'
 import type { AnswerResult, Status } from '../types'
 
 const HISTORY_KEY = 'cairn-history'
 interface HistoryItem {
   q: string
+  campus: Campus | null
   status: Status
   at: string
 }
@@ -18,7 +21,7 @@ function loadHistory(): HistoryItem[] {
   try {
     const raw = localStorage.getItem(HISTORY_KEY)
     const list = raw ? JSON.parse(raw) : []
-    return Array.isArray(list) ? list.slice(0, 8) : []
+    return Array.isArray(list) ? list.filter((x) => typeof x?.q === 'string').slice(0, 8) : []
   } catch {
     return []
   }
@@ -31,10 +34,13 @@ function saveHistory(list: HistoryItem[]) {
   }
 }
 
+/** The desk: pick a campus, ask; the answer; the recent questions. */
 export default function DeskPage({ active }: { active: boolean }) {
   const { t } = useTranslation()
+  const [campus, setCampus] = useCampus()
   const [question, setQuestion] = useState('')
   const [asked, setAsked] = useState('')
+  const [pending, setPending] = useState<string | null>(null) // a question waiting for a campus
   const [busy, setBusy] = useState(false)
   const [result, setResult] = useState<AnswerResult | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -43,13 +49,20 @@ export default function DeskPage({ active }: { active: boolean }) {
   const busyRef = useRef(false)
   const examples = t('desk.examples', { returnObjects: true }) as string[]
 
-  const ask = useCallback(async (q: string) => {
+  const ask = useCallback(async (q: string, c: Campus | null = getCampus()) => {
     const text = q.trim()
     if (!text || busyRef.current) return
     setQuestion(text)
-    setAsked(text)
     setError(null)
-    const known = answers.current.get(text)
+    if (!c) {
+      // No campus yet: keep the question and ask it the moment one is chosen.
+      setPending(text)
+      return
+    }
+    setPending(null)
+    setAsked(text)
+    const key = `${c}|${text}`
+    const known = answers.current.get(key)
     if (known) {
       setResult(known)
       return
@@ -58,11 +71,11 @@ export default function DeskPage({ active }: { active: boolean }) {
     setBusy(true)
     setResult(null)
     try {
-      const r = await api.ask(text)
-      answers.current.set(text, r)
+      const r = await api.ask(text, c)
+      answers.current.set(key, r)
       setResult(r)
       setHistory((h) => {
-        const next = [{ q: text, status: r.status, at: new Date().toISOString() }, ...h.filter((x) => x.q !== text)].slice(0, 8)
+        const next = [{ q: text, campus: c, status: r.status, at: new Date().toISOString() }, ...h.filter((x) => !(x.q === text && x.campus === c))].slice(0, 8)
         saveHistory(next)
         return next
       })
@@ -74,14 +87,24 @@ export default function DeskPage({ active }: { active: boolean }) {
     }
   }, [])
 
-  // '#/ask?q=…' from the cover: ask it, then drop the query so a reload does not ask again.
+  const chooseCampus = (c: Campus) => {
+    setCampus(c)
+    if (pending) void ask(pending, c)
+  }
+
+  // '#/ask?q=…' from the cover (or typed in): ask it, then drop the query so a reload does not ask again.
+  // Checked on arrival and on every hash change, since a link to the desk while the desk is open changes only the hash.
   useEffect(() => {
     if (!active) return
-    const m = window.location.hash.match(/[?&]q=([^&]+)/)
-    if (m) {
+    const check = () => {
+      const m = window.location.hash.match(/^#\/?ask\?(?:.*&)?q=([^&]+)/)
+      if (!m) return
       window.history.replaceState(null, '', '#/ask')
       void ask(decodeURIComponent(m[1].replace(/\+/g, ' ')))
     }
+    check()
+    window.addEventListener('hashchange', check)
+    return () => window.removeEventListener('hashchange', check)
   }, [active, ask])
 
   useEffect(() => {
@@ -100,21 +123,27 @@ export default function DeskPage({ active }: { active: boolean }) {
           <h1 id="desk-title" className="cn-h1">{t('desk.title')}</h1>
           <p className="lead">{t(IS_STATIC ? 'desk.demoLead' : 'desk.lead')}</p>
           <form className="cn-card cn-askcard" onSubmit={submit}>
-            <TextInput
-              size="lg"
-              label={t('desk.label')}
-              labelProps={{ className: 'visually-hidden' }}
-              placeholder={t('desk.placeholder')}
-              value={question}
-              onChange={(e) => setQuestion(e.currentTarget.value)}
-              maxLength={500}
-              disabled={busy}
-              classNames={{ root: 'cn-askfield' }}
-              autoComplete="off"
-            />
-            <Button type="submit" size="lg" loading={busy} rightSection={<IconArrowRight size={18} aria-hidden />}>
-              {t('desk.ask')}
-            </Button>
+            <CampusPicker value={campus} onChange={chooseCampus} name="campus-desk" hint={!campus} />
+            <div className="cn-askrow">
+              <TextInput
+                size="lg"
+                label={t('desk.label')}
+                labelProps={{ className: 'visually-hidden' }}
+                placeholder={t('desk.placeholder')}
+                value={question}
+                onChange={(e) => setQuestion(e.currentTarget.value)}
+                maxLength={500}
+                disabled={busy}
+                classNames={{ root: 'cn-askfield' }}
+                autoComplete="off"
+              />
+              <Button type="submit" size="lg" loading={busy} rightSection={<IconArrowRight size={18} aria-hidden />}>
+                {t('desk.ask')}
+              </Button>
+            </div>
+            {pending && !campus && (
+              <p className="cn-campus-need" role="status">{t('campus.needed')}</p>
+            )}
           </form>
           <div className="cn-examples">
             <span className="small">{t('desk.examplesLabel')}</span>
@@ -168,10 +197,13 @@ export default function DeskPage({ active }: { active: boolean }) {
           ) : (
             <ul>
               {history.map((h) => (
-                <li key={h.q}>
-                  <button type="button" className="cn-hist" aria-current={h.q === asked ? 'true' : undefined} onClick={() => void ask(h.q)}>
+                <li key={`${h.campus}|${h.q}`}>
+                  <button type="button" className="cn-hist" aria-current={h.q === asked && h.campus === campus ? 'true' : undefined} onClick={() => void ask(h.q, h.campus ?? getCampus())}>
                     <span>{h.q}</span>
-                    <span className="small">{t(`desk.status.${h.status}`)}</span>
+                    <span className="small">
+                      {h.campus ? `${t(`campus.names.${h.campus}`)} · ` : ''}
+                      {t(`desk.status.${h.status}`)}
+                    </span>
                   </button>
                 </li>
               ))}

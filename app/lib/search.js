@@ -6,6 +6,7 @@ import { EMBED_DIM, embedQuery } from './embed.js'
 
 const SCHEMA = {
   id: 'string', doc: 'string', title: 'string', level: 'string', section: 'string', kind: 'string', url: 'string', text: 'string',
+  campus: 'string', topic: 'string',
   embedding: `vector[${EMBED_DIM}]`,
 }
 
@@ -27,10 +28,10 @@ export async function loadIndex(file) {
  * Reciprocal rank fusion (Cormack et al., 2009): score = sum of 1 / (60 + rank) over the keyword and the vector lists.
  * It needs no score calibration, so a BM25 list that finds nothing (a Chinese question) simply adds nothing.
  */
-export async function retrieveRRF(db, query, { k = 6, depth = 30, c = 60 } = {}) {
+export async function retrieveRRF(db, query, { k = 6, depth = 30, c = 60, campus } = {}) {
   const [kw, vec] = await Promise.all([
-    retrieve(db, query, { mode: 'keyword', k: depth }),
-    retrieve(db, query, { mode: 'vector', k: depth }),
+    retrieve(db, query, { mode: 'keyword', k: depth, campus }),
+    retrieve(db, query, { mode: 'vector', k: depth, campus }),
   ])
   const fused = new Map()
   for (const list of [kw, vec]) {
@@ -51,17 +52,19 @@ export async function retrieveRRF(db, query, { k = 6, depth = 30, c = 60 } = {})
  * mode: 'keyword' (BM25 only), 'vector' (embeddings only) or 'hybrid' (both, Orama's weighted fusion).
  * Returns the top k chunks with their score and rank, without the stored vectors.
  */
-export async function retrieve(db, query, { mode = 'hybrid', k = 6, weights = { text: 0.4, vector: 0.6 } } = {}) {
+export async function retrieve(db, query, { mode = 'hybrid', k = 6, weights = { text: 0.4, vector: 0.6 }, campus } = {}) {
   const props = ['title', 'section', 'text']
+  // A campus narrows the search to its own pages plus the pages that apply to every campus.
+  const where = campus ? { campus: ['all', campus] } : undefined
   let params
   if (mode === 'keyword') {
-    params = { term: query, properties: props, limit: k }
+    params = { term: query, properties: props, limit: k, where }
   } else {
     const value = await embedQuery(query)
     const vector = { value, property: 'embedding' }
     params = mode === 'vector'
-      ? { mode: 'vector', vector, similarity: 0.2, limit: k, includeVectors: false }
-      : { mode: 'hybrid', term: query, properties: props, vector, similarity: 0.2, limit: k, hybridWeights: weights, includeVectors: false }
+      ? { mode: 'vector', vector, similarity: 0.2, limit: k, includeVectors: false, where }
+      : { mode: 'hybrid', term: query, properties: props, vector, similarity: 0.2, limit: k, hybridWeights: weights, includeVectors: false, where }
   }
   const res = await search(db, params)
   return res.hits.map((h, i) => {

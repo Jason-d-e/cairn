@@ -1,0 +1,371 @@
+{
+ "note": "The public Monash pages this instance of Cairn reads: student administration pages on monash.edu (every campus and the Australian campuses, plus the Indonesia DSS pages) and monash.edu.my (the Malaysia campus). campus: all | au | my | id. Read them in your own browser with tools/grab-pages.js, one site at a time, and put the downloads in corpus/monash-src/. The pages are Monash University’s and are not in this repository.",
+ "topics": {
+  "special-consideration": "Special consideration and extensions",
+  "exams": "Final assessments and exams",
+  "withdrawal": "Withdrawing, intermission and fees",
+  "dates": "Key dates",
+  "disability": "Disability Support Services",
+  "contacts": "Contacts and forms"
+ },
+ "campuses": {
+  "all": "All campuses",
+  "au": "Australia",
+  "my": "Malaysia",
+  "id": "Indonesia"
+ },
+ "sites": {
+  "www.monash.edu": [
+   {
+    "id": "all-assessment-about",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/about"
+   },
+   {
+    "id": "all-dates-census",
+    "campus": "all",
+    "topic": "dates",
+    "url": "https://www.monash.edu/students/admin/dates/census-dates"
+   },
+   {
+    "id": "all-disability-alternative-assessment",
+    "campus": "all",
+    "topic": "disability",
+    "url": "https://www.monash.edu/students/admin/assessments/alternative"
+   },
+   {
+    "id": "all-enrolment-changes",
+    "campus": "all",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu/students/admin/enrolments/change"
+   },
+   {
+    "id": "all-exams-dates-timetables",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/dates-timetables"
+   },
+   {
+    "id": "all-exams-device-specs",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/device-specs"
+   },
+   {
+    "id": "all-exams-eexams",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams"
+   },
+   {
+    "id": "all-exams-eexams-about",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/about"
+   },
+   {
+    "id": "all-exams-eexams-off-campus",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/off-campus"
+   },
+   {
+    "id": "all-exams-final-periods",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/dates-timetables/finals"
+   },
+   {
+    "id": "all-exams-help",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/help"
+   },
+   {
+    "id": "all-exams-prepare",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/prepare"
+   },
+   {
+    "id": "all-exams-rules",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/rules"
+   },
+   {
+    "id": "all-exams-supervision",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/supervision"
+   },
+   {
+    "id": "all-exams-supplementary",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/supplementary"
+   },
+   {
+    "id": "all-exams-troubleshooting",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/troubleshooting"
+   },
+   {
+    "id": "all-results",
+    "campus": "all",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/results"
+   },
+   {
+    "id": "all-sc-defer",
+    "campus": "all",
+    "topic": "special-consideration",
+    "url": "https://www.monash.edu/students/admin/assessments/extensions-special-consideration/defer"
+   },
+   {
+    "id": "all-sc-documents",
+    "campus": "all",
+    "topic": "special-consideration",
+    "url": "https://www.monash.edu/students/admin/assessments/extensions-special-consideration/documents"
+   },
+   {
+    "id": "all-sc-overview",
+    "campus": "all",
+    "topic": "special-consideration",
+    "url": "https://www.monash.edu/students/admin/assessments/extensions-special-consideration"
+   },
+   {
+    "id": "all-sc-support",
+    "campus": "all",
+    "topic": "special-consideration",
+    "url": "https://www.monash.edu/students/admin/assessments/extensions-special-consideration/support"
+   },
+   {
+    "id": "all-withdrawal-intermission",
+    "campus": "all",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu/students/admin/enrolments/change/intermission"
+   },
+   {
+    "id": "all-withdrawal-special-circumstances",
+    "campus": "all",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu/students/admin/fees/refunds-remission-credit/special-circumstances"
+   },
+   {
+    "id": "all-withdrawal-units",
+    "campus": "all",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu/students/admin/enrolments/change/add-or-discontinue-units"
+   },
+   {
+    "id": "au-dates-principal",
+    "campus": "au",
+    "topic": "dates",
+    "url": "https://www.monash.edu/students/admin/dates/principal-dates"
+   },
+   {
+    "id": "au-dates-summary",
+    "campus": "au",
+    "topic": "dates",
+    "url": "https://www.monash.edu/students/admin/dates/summary-dates"
+   },
+   {
+    "id": "au-disability-carers",
+    "campus": "au",
+    "topic": "disability",
+    "url": "https://www.monash.edu/students/support/disability/services-for-students/carers"
+   },
+   {
+    "id": "au-disability-overview",
+    "campus": "au",
+    "topic": "disability",
+    "url": "https://www.monash.edu/students/support/disability"
+   },
+   {
+    "id": "au-disability-register",
+    "campus": "au",
+    "topic": "disability",
+    "url": "https://www.monash.edu/students/support/disability/services-for-students/register"
+   },
+   {
+    "id": "au-sc-uhs-certificate",
+    "campus": "au",
+    "topic": "special-consideration",
+    "url": "https://www.monash.edu/students/admin/assessments/extensions-special-consideration/documents/health-services"
+   },
+   {
+    "id": "id-disability-overview",
+    "campus": "id",
+    "topic": "disability",
+    "url": "https://www.monash.edu/indonesia/students/student-administration-and-academic-services/disability-support-services"
+   },
+   {
+    "id": "id-disability-register",
+    "campus": "id",
+    "topic": "disability",
+    "url": "https://www.monash.edu/indonesia/students/student-administration-and-academic-services/disability-support-services/register-for-disability-services"
+   },
+   {
+    "id": "my-exams-eexams-on-campus",
+    "campus": "my",
+    "topic": "exams",
+    "url": "https://www.monash.edu/students/admin/assessments/exams/on-campus-malaysia"
+   }
+  ],
+  "www.monash.edu.my": [
+   {
+    "id": "my-admin-hub",
+    "campus": "my",
+    "topic": "contacts",
+    "url": "https://www.monash.edu.my/student-services/student-admin"
+   },
+   {
+    "id": "my-assessments-results-hub",
+    "campus": "my",
+    "topic": "exams",
+    "url": "https://www.monash.edu.my/student-services/student-admin/examinations-results/assessments-and-results"
+   },
+   {
+    "id": "my-contacts-emergency",
+    "campus": "my",
+    "topic": "contacts",
+    "url": "https://www.monash.edu.my/student-services/home/emergency-contacts"
+   },
+   {
+    "id": "my-dates-principal",
+    "campus": "my",
+    "topic": "dates",
+    "url": "https://www.monash.edu.my/student-services/student-admin/principal-dates-for-monash-university-malaysia"
+   },
+   {
+    "id": "my-disability-carers",
+    "campus": "my",
+    "topic": "disability",
+    "url": "https://www.monash.edu.my/student-services/support-services/disability-support/students-who-are-carers"
+   },
+   {
+    "id": "my-disability-financial-support",
+    "campus": "my",
+    "topic": "disability",
+    "url": "https://www.monash.edu.my/student-services/support-services/disability-support/financial-support-for-disabled-students"
+   },
+   {
+    "id": "my-disability-overview",
+    "campus": "my",
+    "topic": "disability",
+    "url": "https://www.monash.edu.my/student-services/support-services/disability-support"
+   },
+   {
+    "id": "my-disability-parking",
+    "campus": "my",
+    "topic": "disability",
+    "url": "https://www.monash.edu.my/student-services/support-services/disability-support/disability-parking"
+   },
+   {
+    "id": "my-disability-register",
+    "campus": "my",
+    "topic": "disability",
+    "url": "https://www.monash.edu.my/student-services/support-services/disability-support/register-with-disability-services"
+   },
+   {
+    "id": "my-enrolment-cancellation-by-university",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/student-services/student-admin/enrol-and-re-enrol/changing-your-enrolment/cancellation-units-by-university"
+   },
+   {
+    "id": "my-enrolment-changing",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/student-services/student-admin/enrol-and-re-enrol/changing-your-enrolment"
+   },
+   {
+    "id": "my-enrolment-course-discontinuation",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/student-services/student-admin/enrol-and-re-enrol/changing-your-enrolment/course-discontinuation"
+   },
+   {
+    "id": "my-enrolment-faq",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/student-services/student-admin/enrol-and-re-enrol/enrolment-and-re-enrolment"
+   },
+   {
+    "id": "my-enrolment-hub",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/student-services/student-admin/enrol-and-re-enrol"
+   },
+   {
+    "id": "my-enrolment-intermission",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/student-services/student-admin/enrol-and-re-enrol/changing-your-enrolment/intermission"
+   },
+   {
+    "id": "my-enrolment-re-enrol",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/student-services/student-admin/enrol-and-re-enrol/re-enrol"
+   },
+   {
+    "id": "my-exams-eexams-library",
+    "campus": "my",
+    "topic": "exams",
+    "url": "https://www.monash.edu.my/library/services-facilities/eexams"
+   },
+   {
+    "id": "my-exams-faq",
+    "campus": "my",
+    "topic": "exams",
+    "url": "https://www.monash.edu.my/student-services/student-admin/examinations-results/exams-and-results"
+   },
+   {
+    "id": "my-exams-hub",
+    "campus": "my",
+    "topic": "exams",
+    "url": "https://www.monash.edu.my/student-services/student-admin/examinations-results"
+   },
+   {
+    "id": "my-exams-special-arrangements",
+    "campus": "my",
+    "topic": "disability",
+    "url": "https://www.monash.edu.my/student-services/student-admin/examinations-results/assessments-and-results/special-arrangements-for-final-assessments"
+   },
+   {
+    "id": "my-exams-venues",
+    "campus": "my",
+    "topic": "exams",
+    "url": "https://www.monash.edu.my/student-services/student-admin/examinations-results/venues-allocated-seating"
+   },
+   {
+    "id": "my-forms",
+    "campus": "my",
+    "topic": "contacts",
+    "url": "https://www.monash.edu.my/student-services/student-admin/student-forms"
+   },
+   {
+    "id": "my-forms-letters",
+    "campus": "my",
+    "topic": "contacts",
+    "url": "https://www.monash.edu.my/student-services/student-admin/student-forms/student-forms-and-letters"
+   },
+   {
+    "id": "my-results",
+    "campus": "my",
+    "topic": "exams",
+    "url": "https://www.monash.edu.my/student-services/student-admin/examinations-results/results"
+   },
+   {
+    "id": "my-withdrawal-faq-business",
+    "campus": "my",
+    "topic": "withdrawal",
+    "url": "https://www.monash.edu.my/business/current/frequently-asked-questions/faq-unit-withdrawal"
+   }
+  ]
+ }
+}

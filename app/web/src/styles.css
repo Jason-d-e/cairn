@@ -241,3 +241,23 @@ p { margin: 0; text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- The campus: a choice of three before the question, as radio chips; the chosen one takes the thin accent ring ---------- */
+.cn-campus { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: var(--space-xs); }
+.cn-campus-legend { padding: 0; font-weight: 500; font-size: var(--text-sm); color: var(--color-ink-2); }
+.cn-campus-opts { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.cn-chip[data-on='true'] { background: var(--color-light); color: var(--color-ink); box-shadow: 0 0 0 1.5px var(--color-accent); }
+.cn-chip:has(:focus-visible) { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.cn-campus-hint { max-width: 60ch; }
+.cn-campus-need { color: var(--color-error); font-weight: 500; }
+/* The ask card now holds the campus first, then the field and its button in one row. */
+.cn-askcard { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); padding: var(--space-md) var(--space-lg) var(--space-lg); }
+.cn-askrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-sm); }
+.cn-askrow .cn-askfield { min-width: 0; }
+.cn-askrow .cn-field { min-height: 48px; border-radius: var(--radius-inner); }
+/* The page an answer rests on reads as the pill's content, not as a caption. */
+.cn-fact--sc .cn-fact-title { color: var(--color-ink); font-weight: 500; }
+.cn-fact--sc .cn-level-l { background: var(--color-light); font-weight: 500; }
+/* The campus an answer was made for, after the status, in the quiet colour. */
+.cn-forcampus { margin-left: var(--space-sm); font-weight: 400; color: var(--color-muted); }
+@media (max-width: 62em) { .cn-askrow { grid-template-columns: minmax(0, 1fr); } }

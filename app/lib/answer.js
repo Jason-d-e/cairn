@@ -17,24 +17,25 @@ export class RefusalError extends Error {
 let client = null
 const getClient = () => (client ??= new Anthropic({ apiKey: config.apiKey, baseURL: config.baseURL, timeout: 60_000, maxRetries: 2 }))
 
-export async function answerQuestion(kb, question) {
-  const { context, trace } = await findContext(kb, question)
+export async function answerQuestion(kb, question, { campus } = {}) {
+  const { context, trace } = await findContext(kb, question, { campus })
   const started = Date.now()
   const response = await getClient().beta.messages.create({
     model: config.model,
     max_tokens: 8000,
     output_config: { effort: config.effort, format: { type: 'json_schema', schema: buildSchema(context.map((c) => c.id)) } },
     system: SYSTEM,
-    messages: [{ role: 'user', content: buildUserMessage(question, context) }],
+    messages: [{ role: 'user', content: buildUserMessage(question, context, kb.meta) }],
   })
   const meta = {
     prompt_version: PROMPT_VERSION,
+    campus: campus ?? null,
     corpus: `${kb.meta.source}@${kb.meta.commit}`,
     model_requested: config.model,
     model_served: response.model,
     effort: config.effort,
     latency_ms: Date.now() - started,
-    retrieval_ms: trace.ms.retrieve + trace.ms.rerank,
+    retrieval_ms: (trace.ms.translate ?? 0) + trace.ms.retrieve + trace.ms.rerank,
     stop_reason: response.stop_reason,
     usage: { input_tokens: response.usage?.input_tokens ?? null, output_tokens: response.usage?.output_tokens ?? null },
   }

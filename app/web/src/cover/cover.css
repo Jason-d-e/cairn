@@ -204,3 +204,12 @@
 @media (prefers-reduced-motion: reduce) {
   .hm *, .hm *::before, .hm *::after { animation: none !important; transition: none !important; }
 }
+
+/* The hero form now opens with the campus, then the field and its button in one row (the desk's order). */
+.hm-askform { grid-template-columns: minmax(0, 1fr); gap: var(--space-sm); align-items: stretch; }
+.hm-askrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-xs); }
+.hm .cn-campus-legend { color: var(--color-ink-2); }
+.hm .cn-campus-opt { min-height: 36px; padding: 6px 14px; }
+@media (max-width: 40em) {
+  .hm-askrow { grid-template-columns: minmax(0, 1fr); }
+}

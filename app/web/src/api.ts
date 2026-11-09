@@ -2,6 +2,7 @@
 // Built with VITE_STATIC=1 (the GitHub Pages demo), it reads the JSON that scripts/export-static.js wrote instead,
 // and serves the stored real answers for the example questions; any other question gets a 'static_demo' error.
 import type { AnswerResult, ApiError, Gaps, Library, Quality, StatusInfo, Trace } from './types'
+import type { Campus } from './campus'
 
 export const IS_STATIC = import.meta.env.VITE_STATIC === '1'
 const STATIC_BASE = `${import.meta.env.BASE_URL}static/`
@@ -34,33 +35,38 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
 
 interface StaticIndex {
   generated: string
-  questions: { q: string; key: string; lang: string; file: string }[]
+  questions: { q: string; key: string; lang: string; campus: string; file: string }[]
 }
 /** The same normalisation scripts/export-static.js used when it wrote the index. */
 const keyOf = (q: string) => q.trim().toLowerCase().replace(/\s+/g, ' ').replace(/[?？。.!！\s]+$/, '')
 let index: Promise<StaticIndex> | null = null
 
-async function askStatic(question: string): Promise<AnswerResult> {
+/** The stored answer for this question at this campus; failing that, the same question answered for another campus. */
+async function askStatic(question: string, campus: Campus): Promise<AnswerResult> {
   index ??= call<StaticIndex>(`${STATIC_BASE}answers/index.json`)
-  const entry = (await index).questions.find((e) => e.key === keyOf(question))
+  const list = (await index).questions
+  const key = keyOf(question)
+  const entry = list.find((e) => e.key === key && e.campus === campus) ?? list.find((e) => e.key === key)
   if (!entry) throw new RequestError({ code: 'static_demo', message: 'static demo', retryable: false })
   return call<AnswerResult>(`${STATIC_BASE}${entry.file}`)
 }
+
+const searchUrl = (q: string, campus?: Campus | null) => `/api/search?q=${encodeURIComponent(q)}${campus ? `&campus=${campus}` : ''}`
 
 export const api = IS_STATIC
   ? {
       status: () => call<StatusInfo>(`${STATIC_BASE}status.json`),
       ask: askStatic,
-      search: (q: string) => call<Trace>(`/api/search?q=${encodeURIComponent(q)}`),
+      search: (q: string, campus?: Campus | null) => call<Trace>(searchUrl(q, campus)),
       library: () => call<Library>(`${STATIC_BASE}library.json`),
       gaps: () => call<Gaps>(`${STATIC_BASE}gaps.json`),
       quality: () => call<Quality>(`${STATIC_BASE}quality.json`),
     }
   : {
       status: () => call<StatusInfo>('/api/status'),
-      ask: (question: string) =>
-        call<AnswerResult>('/api/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question }) }),
-      search: (q: string) => call<Trace>(`/api/search?q=${encodeURIComponent(q)}`),
+      ask: (question: string, campus: Campus) =>
+        call<AnswerResult>('/api/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, campus }) }),
+      search: (q: string, campus?: Campus | null) => call<Trace>(searchUrl(q, campus)),
       library: () => call<Library>('/api/library'),
       gaps: () => call<Gaps>('/api/gaps'),
       quality: () => call<Quality>('/api/quality'),

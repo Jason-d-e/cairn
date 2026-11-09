@@ -4,15 +4,18 @@ import { SegmentedControl, TextInput } from '@mantine/core'
 import { IconExternalLink } from '@tabler/icons-react'
 import Shell from '../components/Shell'
 import { api } from '../api'
+import { getCampus } from '../campus'
 import type { Gaps, Library } from '../types'
 
-const PRINCIPLES = ['1', '2', '3', '4'] as const
+const CAMPUS_FILTERS = ['all', 'au', 'my', 'id'] as const
+const TOPIC_ORDER = ['special-consideration', 'exams', 'withdrawal', 'dates', 'disability', 'contacts']
 
+/** The pages the desk knows, grouped by topic, filtered by the campus they apply to; then the questions it could not answer. */
 export default function LibraryPage() {
   const { t, i18n } = useTranslation()
   const [lib, setLib] = useState<Library | null>(null)
   const [gaps, setGaps] = useState<Gaps | null>(null)
-  const [level, setLevel] = useState('all')
+  const [campus, setCampus] = useState<string>(getCampus() ?? 'all')
   const [q, setQ] = useState('')
 
   useEffect(() => {
@@ -24,8 +27,11 @@ export default function LibraryPage() {
   }, [t])
 
   const needle = q.trim().toLowerCase()
-  const docs = (lib?.documents ?? []).filter((d) => (level === 'all' || d.level === level) && (!needle || `${d.id} ${d.title}`.toLowerCase().includes(needle)))
-  const groups = PRINCIPLES.map((p) => ({ p, docs: docs.filter((d) => d.id.startsWith(`${p}.`)) })).filter((g) => g.docs.length)
+  const docs = (lib?.documents ?? []).filter((d) => (campus === 'all' || d.campus === 'all' || d.campus === campus) && (!needle || d.title.toLowerCase().includes(needle)))
+  const topics = [...TOPIC_ORDER, ...Object.keys(lib?.meta.topics ?? {}).filter((k) => !TOPIC_ORDER.includes(k))]
+  const groups = topics.map((topic) => ({ topic, docs: docs.filter((d) => d.topic === topic) })).filter((g) => g.docs.length)
+  const topicName = (topic: string) => t(`library.topics.${topic}`, { defaultValue: lib?.meta.topics?.[topic] ?? topic })
+  const campusName = (c: string) => t(`campus.names.${c}`, { defaultValue: c })
   const locale = i18n.language === 'zh' ? 'zh-CN' : 'en-GB'
   const fmt = (iso: string) => new Date(iso).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' })
 
@@ -33,15 +39,15 @@ export default function LibraryPage() {
     <Shell page="library">
       <div className="cn-page-head">
         <h1 className="cn-h1">{t('library.title')}</h1>
-        {lib && <p className="lead">{t('library.lead', { docs: lib.meta.documents, chunks: lib.meta.chunks, commit: lib.meta.commit })}</p>}
+        {lib && <p className="lead">{t('library.lead', { docs: lib.meta.documents, chunks: lib.meta.chunks, commit: fmt(lib.meta.commit) })}</p>}
       </div>
 
       <div className="cn-filters">
         <SegmentedControl
-          value={level}
-          onChange={setLevel}
-          data={['all', 'A', 'AA', 'AAA'].map((v) => ({ value: v, label: t(`library.levels.${v}`) }))}
-          aria-label={t('library.heads.level')}
+          value={campus}
+          onChange={setCampus}
+          data={CAMPUS_FILTERS.map((v) => ({ value: v, label: campusName(v) }))}
+          aria-label={t('campus.label')}
         />
         <TextInput className="cn-search" value={q} onChange={(e) => setQ(e.currentTarget.value)} placeholder={t('library.search')} aria-label={t('library.search')} />
         <span className="small num" aria-live="polite">{t('library.count', { n: docs.length })}</span>
@@ -53,32 +59,27 @@ export default function LibraryPage() {
           <table className="cn-table cn-lib">
             <thead>
               <tr>
-                <th scope="col">{t('library.heads.code')}</th>
                 <th scope="col">{t('library.heads.title')}</th>
-                <th scope="col" className="cn-hide-s">{t('library.heads.guideline')}</th>
-                <th scope="col">{t('library.heads.level')}</th>
+                <th scope="col">{t('library.heads.campus')}</th>
                 <th scope="col" className="num">{t('library.heads.passages')}</th>
+                <th scope="col" className="cn-hide-s num">{t('library.heads.words')}</th>
               </tr>
             </thead>
             {groups.map((g) => (
-              <tbody key={g.p}>
+              <tbody key={g.topic}>
                 <tr className="cn-group">
-                  <th scope="rowgroup" colSpan={5}>
-                    <span className="cn-code">{g.p}</span>
-                    {t(`library.principles.${g.p}`)}
-                  </th>
+                  <th scope="rowgroup" colSpan={4}>{topicName(g.topic)}</th>
                 </tr>
                 {g.docs.map((d) => (
                   <tr key={d.id}>
-                    <td className="cn-code">{d.id}</td>
                     <td>
-                      <a className="cn-link" href={d.understanding_url} rel="noreferrer" aria-label={t('library.open', { id: d.id })} lang="en">
+                      <a className="cn-link" href={d.url} rel="noreferrer" aria-label={t('library.open', { title: d.title })} lang="en">
                         {d.title} <IconExternalLink size={12} aria-hidden style={{ verticalAlign: '-1px' }} />
                       </a>
                     </td>
-                    <td className="small cn-hide-s" lang="en">{d.guideline}</td>
-                    <td><span className="cn-level-l">{d.level}</span></td>
+                    <td><span className="cn-level-l">{campusName(d.campus)}</span></td>
                     <td className="cn-code num">{d.chunks}</td>
+                    <td className="cn-code num cn-hide-s">{d.words}</td>
                   </tr>
                 ))}
               </tbody>
@@ -86,7 +87,7 @@ export default function LibraryPage() {
           </table>
         </div>
       )}
-      {lib && <p className="small" style={{ marginTop: 'var(--space-md)' }}>{t('library.built', { date: fmt(lib.meta.built_at), source: lib.meta.source.replace('https://github.com/', ''), commit: lib.meta.commit })}</p>}
+      {lib && <p className="small" style={{ marginTop: 'var(--space-md)', maxWidth: '72ch' }}>{t('library.built', { date: fmt(lib.meta.built_at), commit: fmt(lib.meta.commit) })}</p>}
 
       <section className="cn-section" aria-labelledby="gaps-title" id="gaps">
         <div className="cn-page-head" style={{ marginBottom: 0 }}>

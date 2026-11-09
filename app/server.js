@@ -31,15 +31,21 @@ app.get('/api/status', (req, res) => {
     model: config.model,
     corpus: { source: kb.meta.source, commit: kb.meta.commit, documents: kb.meta.documents, chunks: kb.meta.chunks, license: kb.meta.license, notice: kb.meta.notice },
     retrieval: { ...RETRIEVAL, embed_model: EMBED_MODEL, rerank_model: RERANK_MODEL, chunk_size: kb.meta.chunk_size, chunk_overlap: kb.meta.chunk_overlap },
+    campuses: kb.meta.campuses ?? {},
+    topics: kb.meta.topics ?? {},
   })
 })
+
+/** A campus code from the request, or undefined: 'all' pages are always searched, a campus adds its own. */
+const CAMPUS_CODES = ['au', 'my', 'id']
+const campusOf = (raw) => (CAMPUS_CODES.includes(String(raw ?? '').trim()) ? String(raw).trim() : undefined)
 
 // Retrieval only: shows what the pipeline would hand to the model. No model call, no cost.
 app.get('/api/search', async (req, res, next) => {
   try {
     const q = String(req.query.q ?? '').trim()
     if (!q || q.length > 500) return res.status(400).json({ error: { code: 'bad_question', message: 'Ask a question of 1 to 500 characters.' } })
-    const { trace } = await findContext(kb, q)
+    const { trace } = await findContext(kb, q, { campus: campusOf(req.query.campus) })
     res.json(trace)
   } catch (e) {
     next(e)
@@ -48,13 +54,14 @@ app.get('/api/search', async (req, res, next) => {
 
 app.post('/api/ask', async (req, res) => {
   const question = String(req.body?.question ?? '').trim()
+  const campus = campusOf(req.body?.campus)
   if (!question || question.length > 500) return res.status(400).json({ error: { code: 'bad_question', message: 'Ask a question of 1 to 500 characters.' } })
   if (limited(req.ip)) return res.status(429).json({ error: { code: 'rate_limited', message: 'Too many questions in a minute. Wait a moment.', retryable: true } })
   if (!modelConfigured()) return res.status(503).json({ error: { code: 'model_not_configured', message: 'Add ANTHROPIC_API_KEY to app/.env and restart.', retryable: false } })
   try {
-    const result = await answerQuestion(kb, question)
+    const result = await answerQuestion(kb, question, { campus })
     logRun({
-      source: req.get('x-cairn-source') === 'eval' ? 'eval' : 'web', question, status: result.status, model_status: result.model_status,
+      source: req.get('x-cairn-source') === 'eval' ? 'eval' : 'web', question, campus: campus ?? null, status: result.status, model_status: result.model_status,
       checks: result.checks, criteria: result.criteria.map((c) => c.id), missing_info: result.missing_info,
       retrieved: result.trace.chunks.map((c) => c.id), ...result.meta,
     })
@@ -75,7 +82,9 @@ app.get('/api/library', (req, res) => {
 
 // Knowledge gaps: real questions the corpus could not answer, grouped, most asked first.
 app.get('/api/gaps', (req, res) => {
-  const runs = readRuns().filter((r) => r.source === 'web')
+  // Only this corpus's runs count: the log also holds runs against earlier corpora (the WCAG instance).
+  const current = `${kb.meta.source}@${kb.meta.commit}`
+  const runs = readRuns().filter((r) => r.source === 'web' && r.corpus === current)
   const groups = new Map()
   for (const r of runs.filter((x) => x.status === 'not_covered' || x.status === 'withheld')) {
     const key = r.question.trim().toLowerCase()
@@ -108,6 +117,6 @@ app.use((err, req, res, next) => {
 
 app.listen(config.port, '127.0.0.1', () => {
   console.log(`Cairn running at http://localhost:${config.port}`)
-  console.log(`Corpus ${kb.meta.source}@${kb.meta.commit}: ${kb.meta.documents} criteria, ${kb.meta.chunks} chunks`)
+  console.log(`Corpus ${kb.meta.source}@${kb.meta.commit}: ${kb.meta.documents} pages, ${kb.meta.chunks} chunks`)
   console.log(`Model: ${modelConfigured() ? `${config.model} (effort ${config.effort})` : 'NOT CONFIGURED (add ANTHROPIC_API_KEY to app/.env)'}`)
 })

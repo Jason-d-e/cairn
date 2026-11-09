@@ -1,14 +1,16 @@
 // The answer shown on the cover. Regenerated from a real run by scripts/sample.js, never typed by hand.
-// Run on 2026-11-09 with claude-haiku-5-5, corpus https://github.com/w3c/wcag@d1e0639.
+// Run on 2026-11-10 with claude-haiku-5-5, campus my, corpus Monash University student pages (monash.edu, monash.edu.my), read in the owner’s browser@2026-11-09.
 export const SAMPLE = {
-  date: "2026-11-09",
-  question: {"en":"How big must a touch target be?","zh":"触控目标至少要多大？"},
-  answer: {"en":"Under 2.5.8 Target Size (Minimum) (level AA), pointer targets must be at least 24 by 24 CSS pixels, with exceptions. Under 2.5.5 Target Size (Enhanced) (level AAA), the larger size of at least 44 by 44 CSS pixels applies.","zh":"触控目标的最小尺寸是 24×24 CSS 像素。这来自 2.5.8 目标尺寸（最低）（AA 级）。"},
-  quote: "The size of the target for pointer inputs is at least 24 by 24 CSS pixels",
-  source_id: "2.5.8#sc-1",
-  doc: "2.5.8",
-  title: "Target Size (Minimum)",
-  level: "AA",
-  url: "https://www.w3.org/TR/WCAG22/#target-size-minimum",
+  date: "2026-11-10",
+  campus: "my",
+  question: {"en":"I was sick on the day of my exam. Can I defer it?","zh":"考试当天生病没去考，可以申请延期考试吗？"},
+  answer: {"en":"You may be able to defer your final exam if you were unwell on the day, but you need supporting documents. Get a medical certificate (or an approved alternative) from your doctor or a campus health service immediately.","zh":"可以申请，但前提是您因生病等超出自身控制范围的特殊情况无法在设定日期参加考试。您需要尽快取得医疗证明，并在设定日期当晚11.55pm前提交申请。"},
+  quote: "If you missed the assessment because you were unwell, or because of some other exceptional circumstances, you need to provide supporting documents.",
+  source_id: "all-sc-defer#13",
+  doc: "all-sc-defer",
+  title: "Defer or reschedule your scheduled final assessment (exam)",
+  section: "Missed your assessment",
+  page_campus: "all",
+  url: "https://www.monash.edu/students/admin/assessments/extensions-special-consideration/defer",
   verified: true,
 }

@@ -10,14 +10,15 @@ export { bareTitle }
 
 const ICONS = { answered: IconCheck, withheld: IconBan, not_covered: IconFileSearch, needs_clarification: IconHelpCircle }
 
+/** Where a quote comes from: the page and its section, the campus it applies to, the check, the link. */
 function SourceLine({ q }: { q: Quote }) {
   const { t } = useTranslation()
   return (
     <p className="cn-source">
-      <span className="cn-code">{q.doc}</span>
-      <span lang="en">{bareTitle(q.title)}</span>
-      {q.section && <span lang="en">{q.section}</span>}
+      <span className="cn-code" lang="en">{bareTitle(q.title)}</span>
+      {q.section && q.section !== q.title && <span lang="en">{q.section}</span>}
       {q.level && <span>{t('desk.level', { level: q.level })}</span>}
+      {q.campus && <span>{t('campus.appliesTo', { campus: t(`campus.names.${q.campus}`, { defaultValue: q.campus }) })}</span>}
       <span className="cn-tag" data-ok={q.verified}>{q.verified ? t('desk.quote.verified') : t('desk.quote.failed')}</span>
       {q.url && (
         <a className="cn-link" href={q.url} rel="noreferrer">
@@ -59,8 +60,9 @@ function QuoteBlock({ q }: { q: Quote }) {
 }
 
 /**
- * The answer, in reading order: the question (the card's heading) and its status; the conclusion with its
- * key figures marked and repeated as pills; the points, each over the W3C sentence it rests on; then how it was made.
+ * The answer, in reading order: the question (the card's heading), its status and the campus it was answered for;
+ * the bottom line with its key figures marked and repeated as pills under the pages it rests on; the points,
+ * each over the sentence it rests on; then how it was made.
  */
 export default function AnswerCard({ question, result }: { question: string; result: AnswerResult }) {
   const { t } = useTranslation()
@@ -70,7 +72,8 @@ export default function AnswerCard({ question, result }: { question: string; res
   const okPoints = result.points.filter((p) => p.verified)
   const okCitations = result.citations.filter((c) => c.verified)
   const failed = all.filter((q) => !q.verified)
-  const criteriaIds = result.criteria.map((c) => c.id)
+  const sourceIds = result.criteria.map((c) => c.id)
+  const campus = result.meta.campus ? t(`campus.names.${result.meta.campus}`, { defaultValue: result.meta.campus }) : null
 
   return (
     <article className="cn-card cn-answercard" aria-labelledby="answer-q">
@@ -78,6 +81,7 @@ export default function AnswerCard({ question, result }: { question: string; res
         <h2 className="cn-asked" id="answer-q">{question}</h2>
         <p className="cn-status" data-status={result.status}>
           <Icon size={18} aria-hidden /> {t(`desk.status.${result.status}`)}
+          {campus && <span className="cn-forcampus">{t('campus.answeredFor', { campus })}</span>}
         </p>
       </header>
 
@@ -95,7 +99,7 @@ export default function AnswerCard({ question, result }: { question: string; res
         <section>
           <h3 className="cn-label">{t('desk.sections.answer')}</h3>
           <p className="cn-bottom">
-            <KeySentence text={result.answer} quotes={verifiedQuotes} criteria={criteriaIds} />
+            <KeySentence text={result.answer} quotes={verifiedQuotes} criteria={sourceIds} />
           </p>
           <Facts text={result.answer} quotes={verifiedQuotes} criteria={result.criteria} />
         </section>
@@ -105,6 +109,12 @@ export default function AnswerCard({ question, result }: { question: string; res
         <section>
           <h3 className="cn-label">{t('desk.sections.missing')}</h3>
           <p className="cn-hint">{result.missing_info || t('desk.statusHint.not_covered')}</p>
+        </section>
+      )}
+      {result.status === 'answered' && result.missing_info && (
+        <section>
+          <h3 className="cn-label">{t('desk.sections.missing')}</h3>
+          <p className="cn-hint">{result.missing_info}</p>
         </section>
       )}
 

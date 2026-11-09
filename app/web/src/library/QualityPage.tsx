@@ -5,7 +5,7 @@ import Shell from '../components/Shell'
 import { api } from '../api'
 import type { Quality } from '../types'
 
-const IN_USE = 'vector + rerank'
+const IN_USE = 'translate + vector + rerank'
 type LangFilter = 'all' | 'en' | 'zh'
 
 export default function QualityPage() {

@@ -3,18 +3,21 @@ import { useTranslation } from 'react-i18next'
 import { IconArrowUpRight, IconExternalLink } from '@tabler/icons-react'
 import Logo from '../components/Logo'
 import { LanguageSwitch } from '../components/Shell'
+import CampusPicker from '../components/CampusPicker'
 import Light from '../components/Light'
 import KeySentence from '../desk/KeySentence'
 import Facts from '../desk/Facts'
 import { bareTitle } from '../desk/format'
 import { useStatus } from '../status'
+import { useCampus } from '../campus'
 import { PASSAGE } from './passage'
 import { SAMPLE } from './sample'
-import { REPO, W3C, W3C_LICENSE } from '../links'
+import { MONASH_MY_STUDENTS, MONASH_STUDENTS, REPO } from '../links'
 import './cover.css'
 
 const SHOTS = ['answer', 'quotes', 'trace', 'library'] as const
 type Lang = 'en' | 'zh'
+const FALLBACK = { commit: '2026-11-09', docs: 58, chunks: 747 }
 
 function shot(lang: string, name: string) {
   return `${import.meta.env.BASE_URL}shots/${lang === 'zh' ? 'zh' : 'en'}/${name}.webp`
@@ -80,15 +83,15 @@ function SampleCard({ lang, labelled = true }: { lang: Lang; labelled?: boolean 
   const { t } = useTranslation()
   const answer = SAMPLE.answer[lang]
   const quotes = [SAMPLE.quote]
-  const criteria = [{ id: SAMPLE.doc, title: SAMPLE.title, level: SAMPLE.level }]
+  const sources = [{ id: SAMPLE.doc, title: SAMPLE.title, campus: SAMPLE.page_campus }]
   return (
     <div className="hm-sample clear clear--lead">
-      {labelled && <p className="hm-sample-label">{t('cover.hero.sampleLabel', { date: SAMPLE.date })}</p>}
+      {labelled && <p className="hm-sample-label">{t('cover.hero.sampleLabel', { date: SAMPLE.date, campus: t(`campus.names.${SAMPLE.campus}`) })}</p>}
       <p className="hm-sample-q">{SAMPLE.question[lang]}</p>
       <p className="hm-sample-a">
         <KeySentence text={answer} quotes={quotes} criteria={[SAMPLE.doc]} />
       </p>
-      <Facts text={answer} quotes={quotes} criteria={criteria} />
+      <Facts text={answer} quotes={quotes} criteria={sources} />
       <blockquote lang="en" className="hm-sample-quote" cite={SAMPLE.url}>
         <p><mark>{SAMPLE.quote}</mark></p>
       </blockquote>
@@ -107,6 +110,8 @@ export default function CoverPage() {
   const hidden = useRetractingBar()
   const { refs, active } = useActivePanel(SHOTS.length)
   const { status } = useStatus()
+  const [campus, setCampus] = useCampus()
+  const [needCampus, setNeedCampus] = useState(false)
   const [q, setQ] = useState('')
   const lang: Lang = i18n.language === 'zh' ? 'zh' : 'en'
   const examples = (t('desk.examples', { returnObjects: true }) as string[]).slice(0, 3)
@@ -118,14 +123,20 @@ export default function CoverPage() {
   const needs = t('cover.needs.items', { returnObjects: true }) as { title: string; text: string }[]
   const questions = t('cover.close.questions', { returnObjects: true }) as string[]
   const corpus = status?.corpus
+  const chunks = corpus?.chunks ?? FALLBACK.chunks
 
   useSectionFromHash()
   useEffect(() => {
     document.title = 'Cairn'
   }, [])
 
+  // The cover asks nothing itself: with a campus chosen it hands the question to the desk; without one it says so.
   const askFromCover = (e: FormEvent) => {
     e.preventDefault()
+    if (!campus) {
+      setNeedCampus(true)
+      return
+    }
     window.location.hash = `#/ask?q=${encodeURIComponent(q.trim() || t('cover.hero.placeholder'))}`
   }
 
@@ -133,7 +144,7 @@ export default function CoverPage() {
     <div className="hm">
       <section className="hm-banner" aria-label={t('cover.bannerLabel')}>
         <div className="container">
-          <span className="cn-code">{t('cover.banner', { commit: corpus?.commit ?? 'd1e0639', docs: corpus?.documents ?? 87, chunks: corpus?.chunks ?? 1006 })}</span>
+          <span className="cn-code">{t('cover.banner', { commit: corpus?.commit ?? FALLBACK.commit, docs: corpus?.documents ?? FALLBACK.docs, chunks })}</span>
         </div>
       </section>
       <nav className="hm-bar" data-hidden={hidden} aria-label="Cairn">
@@ -150,7 +161,7 @@ export default function CoverPage() {
       </nav>
 
       <main>
-        {/* The hero: the promise and the ask field on paper; one real answer lying in the light. */}
+        {/* The hero: the promise, the campus and the ask field on paper; one real answer lying in the light. */}
         <section className="hm-hero" aria-labelledby="hm-title">
           <Light />
           <div className="container hm-hero-grid">
@@ -162,9 +173,13 @@ export default function CoverPage() {
               </h1>
               <p className="lead">{t('cover.hero.lead')}</p>
               <form className="hm-askform" onSubmit={askFromCover}>
-                <label className="visually-hidden" htmlFor="hm-q">{t('desk.label')}</label>
-                <input id="hm-q" className="hm-input" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('cover.hero.placeholder')} maxLength={500} autoComplete="off" />
-                <button className="btn btn--accent" type="submit">{t('cover.hero.ask')}</button>
+                <CampusPicker value={campus} onChange={(c) => { setCampus(c); setNeedCampus(false) }} name="campus-cover" />
+                <div className="hm-askrow">
+                  <label className="visually-hidden" htmlFor="hm-q">{t('desk.label')}</label>
+                  <input id="hm-q" className="hm-input" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('cover.hero.placeholder')} maxLength={500} autoComplete="off" />
+                  <button className="btn btn--accent" type="submit">{t('cover.hero.ask')}</button>
+                </div>
+                {needCampus && !campus && <p className="cn-campus-need" role="status">{t('campus.needed')}</p>}
               </form>
               <div className="hm-try">
                 <span className="small">{t('cover.hero.tryLabel')}</span>
@@ -182,7 +197,7 @@ export default function CoverPage() {
           </div>
         </section>
 
-        {/* What WCAG is: four rows, read before anything about the product. */}
+        {/* The words a student meets: four rows, read before anything about the product. */}
         <section id="what" className="hm-section" aria-labelledby="hm-what">
           <div className="container">
             <div className="hm-head">
@@ -257,12 +272,12 @@ export default function CoverPage() {
               <div className="hm-compare-col">
                 <h3>{t('cover.compare.passage')}</h3>
                 <article className="clear hm-sheet" lang="en">
-                  <h4><span className="cn-code">{PASSAGE.id.split('#')[0]}</span> {bareTitle(PASSAGE.title)} · {PASSAGE.section}</h4>
-                  {/* The first forty words, unchanged, then the link to the whole passage. */}
+                  <h4>{bareTitle(PASSAGE.title)} · {PASSAGE.section}</h4>
+                  {/* The first forty words, unchanged, then the link to the whole page. */}
                   <p>{PASSAGE.text.split(/\s+/).slice(0, 40).join(' ')} …</p>
                   <a className="hm-sheet-link" href={PASSAGE.url} rel="noreferrer">{t('desk.quote.read')}</a>
                 </article>
-                <p className="hm-count"><span className="fig">{PASSAGE.text.length}</span> <span className="small">{t('cover.compare.passageCount')}</span></p>
+                <p className="hm-count"><span className="fig">{PASSAGE.chars}</span> <span className="small">{t('cover.compare.passageCount', { chunks })}</span></p>
               </div>
               <div className="hm-compare-col">
                 <h3>{t('cover.compare.answer')}</h3>
@@ -345,8 +360,8 @@ export default function CoverPage() {
             <h3>{t('cover.footer.cols.project')}</h3>
             <a href="#/about">{t('cover.footer.links.about')}</a>
             <a href={REPO} rel="noreferrer">{t('cover.footer.links.source')}</a>
-            <a href={W3C} rel="noreferrer">{t('cover.footer.links.w3c')}</a>
-            <a href={W3C_LICENSE} rel="noreferrer">{t('cover.footer.links.license')}</a>
+            <a href={MONASH_STUDENTS} rel="noreferrer">{t('cover.footer.links.monash')}</a>
+            <a href={MONASH_MY_STUDENTS} rel="noreferrer">{t('cover.footer.links.monashMy')}</a>
           </nav>
           <div className="hm-footer-text">
             <p>{t('cover.footer.colophon')}</p>

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import Shell from '../components/Shell'
 
-import { REPO, W3C_LICENSE } from '../links'
+import { MONASH_STUDENTS, REPO } from '../links'
 
 /** Where the fine print lives, as in mature products: one page, linked from the footers, never a banner on every screen. */
 export default function AboutPage() {
@@ -25,7 +25,7 @@ export default function AboutPage() {
         ))}
         <p className="cn-about-links">
           <a className="cn-link" href={REPO} rel="noreferrer">{t('about.source')}</a>
-          <a className="cn-link" href={W3C_LICENSE} rel="noreferrer">{t('about.license')}</a>
+          <a className="cn-link" href={MONASH_STUDENTS} rel="noreferrer">{t('about.monash')}</a>
           <a className="cn-link" href="#/">{t('about.back')}</a>
         </p>
       </article>

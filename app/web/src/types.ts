@@ -1,6 +1,8 @@
 // Shapes returned by ../server.js. Kept in one place so a server change shows up as a type error here.
 
 export type Status = 'answered' | 'not_covered' | 'needs_clarification' | 'withheld'
+/** A campus code the server knows; 'all' marks a page that applies at every campus. */
+export type CampusCode = 'all' | 'au' | 'my' | 'id'
 
 export interface ApiError {
   code: string
@@ -11,10 +13,13 @@ export interface ApiError {
 export interface CorpusMeta {
   source: string
   commit: string
+  fetched?: string[]
   documents: number
   chunks: number
   license: string
   notice: string
+  campuses?: Record<string, string>
+  topics?: Record<string, string>
 }
 
 export interface StatusInfo {
@@ -31,6 +36,8 @@ export interface StatusInfo {
     chunk_size: number
     chunk_overlap: number
   }
+  campuses: Record<string, string>
+  topics: Record<string, string>
 }
 
 /** A quote the model gave, after the server looked for it in the passage it cites. */
@@ -42,7 +49,9 @@ export interface Quote {
   doc?: string
   title?: string
   section?: string
-  level?: string
+  level?: string | null
+  campus?: CampusCode | null
+  topic?: string | null
   url?: string
   source_text?: string
   span?: { start: number; end: number } | null
@@ -57,18 +66,34 @@ export interface TraceChunk {
   doc: string
   title: string
   section: string
-  level: string
+  level: string | null
+  campus: CampusCode | null
+  topic: string | null
   url: string
   retrieval_rank: number | null
   rerank_score: number | null
-  why: 'retrieved' | 'rule text of a retrieved criterion'
+  why: 'retrieved' | 'rule text of a retrieved document'
 }
 
 export interface Trace {
   method: string
+  campus: CampusCode | null
+  /** The text that was searched: the question, or its English rendering. */
+  query: string
+  translated_from: string | null
   candidates: number
-  ms: { retrieve: number; rerank: number }
+  ms: { translate?: number; retrieve: number; rerank: number }
   chunks: TraceChunk[]
+}
+
+/** A page (in another corpus, a rule) an answer rests on, taken from verified quotes only. */
+export interface SourceDoc {
+  id: string
+  title: string
+  level: string | null
+  campus: CampusCode | null
+  topic: string | null
+  url: string
 }
 
 export interface AnswerResult {
@@ -77,13 +102,14 @@ export interface AnswerResult {
   answer: string
   points: Point[]
   citations: Quote[]
-  criteria: { id: string; title: string; level: string }[]
+  criteria: SourceDoc[]
   missing_info: string
   clarifying_question: string
   checks: { quotes_total: number; quotes_verified: number; withheld: boolean }
   trace: Trace
   meta: {
     prompt_version: string
+    campus: CampusCode | null
     corpus: string
     model_requested: string
     model_served: string
@@ -98,12 +124,11 @@ export interface AnswerResult {
 export interface LibraryDoc {
   id: string
   title: string
-  level: string
-  guideline: string
-  added_in: string
-  obsolete: boolean
+  campus: CampusCode
+  topic: string
   url: string
-  understanding_url: string
+  fetched: string
+  words: number
   chunks: number
 }
 
