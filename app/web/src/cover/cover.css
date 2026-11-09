@@ -1,0 +1,206 @@
+/* Hallmark · shape: Map / Diagram · genre: atmospheric · theme: Refract (by request: the team chose it on 2026-11-09 from twelve samples, over Terrazzo) · job: try · draw: f8f44a
+ * hero: Counter, the head and the ask field beside one real answer lying in the water light · nav: banner over a retracting bar · footer: index columns · imagery: the product (real screens) · signature: the real answer as a clear panel in the light, its key figures marked; beneath, the five steps as a timetable · refract: water/pool
+ * axes: light/grotesk-sans/cool · posture: restrained · contrast: pass · fold: pass · v2.1.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: V, the light must not become decoration: it lives in two grounds only (the hero and the close), always away from the head, and the panels on it stay clear */
+/* Hallmark · waive 8 · anatomy.md try: what, how, moments, compare, figures, needs, close · the page teaches first (what WCAG is), then shows, then proves; the order is for a reader who has never heard of WCAG */
+
+/* ---------- Scoped base (the scaffold's base.css, limited to the cover so the app screens keep Mantine's) ---------- */
+.hm { background: var(--color-paper); color: var(--color-ink-2); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.6; }
+.hm h1, .hm h2, .hm h3 { margin: 0; font-family: var(--font-display); font-weight: 400; letter-spacing: var(--tracking-display); line-height: 1.02; color: var(--color-ink); overflow-wrap: break-word; min-width: 0; text-wrap: balance; }
+.hm h1 { max-width: 16ch; font-size: var(--text-display-s); }
+.hm h2 { max-width: 26ch; font-size: var(--text-section); line-height: 1.08; }
+.hm h3 { max-width: 40ch; font-size: var(--text-title); line-height: 1.15; letter-spacing: -0.015em; }
+.hm p { margin: 0; text-wrap: pretty; }
+.hm .lead { font-size: var(--text-lead); line-height: 1.5; max-width: 48ch; color: var(--color-muted); }
+.hm a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+.hm img { max-width: 100%; height: auto; display: block; }
+.hm .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.hm .fig { font-family: var(--font-display); font-weight: 300; font-variant-numeric: tabular-nums; color: var(--color-ink); }
+.hm .small { font-size: var(--text-sm); color: var(--color-muted); }
+.hm section { scroll-margin-top: 96px; }
+.hm .cn-chip { text-decoration: none; }
+/* Chinese: never tracked tighter, a step smaller at display sizes (the glyphs are denser), more leading, and heads that break between phrases. */
+.hm:lang(zh) { line-height: 1.75; }
+.hm:lang(zh) h1, .hm:lang(zh) h2, .hm:lang(zh) h3 { letter-spacing: 0; line-break: strict; }
+.hm:lang(zh) h1 { font-size: calc(var(--text-display-s) * 0.9); line-height: 1.18; }
+.hm:lang(zh) h2 { font-size: calc(var(--text-section) * 0.92); line-height: 1.25; }
+.hm:lang(zh) h3 { line-height: 1.35; }
+.hm:lang(zh) .lead { line-height: 1.7; }
+
+/* ---------- Surfaces (Refract): clear panels over the light, never blurred; shadows tinted by the water, from one sun ---------- */
+.hm .clear { background: color-mix(in oklab, var(--color-light) 82%, transparent); border-radius: var(--radius-card); box-shadow: var(--edge-light), var(--shadow-card); color: var(--color-ink-2); }
+.hm .clear--lead { box-shadow: var(--edge-light), var(--shadow-cast); }
+/* The light: one generated canvas, masked so it lands away from the head and fades to paper under the text. */
+.hm-light { position: absolute; inset: 0; pointer-events: none; -webkit-mask-image: linear-gradient(to right, transparent 34%, var(--mask-ink) 62%); mask-image: linear-gradient(to right, transparent 34%, var(--mask-ink) 62%); }
+.hm-light > canvas, .hm-light > .hm-light-still { position: absolute; inset: 0; width: 100%; height: 100%; display: block; -webkit-mask-image: linear-gradient(to bottom, transparent, var(--mask-ink) 14%, var(--mask-ink) 86%, transparent); mask-image: linear-gradient(to bottom, transparent, var(--mask-ink) 14%, var(--mask-ink) 86%, transparent); }
+.hm-light-still { background: var(--color-shade); }
+
+/* ---------- Controls: pills, eight states ---------- */
+.hm .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 48px; padding: 0 var(--space-lg); border: 0; border-radius: var(--radius-pill); font: inherit; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out); }
+.hm .btn--accent { background: var(--color-accent); color: var(--color-accent-ink); box-shadow: var(--edge-accent), var(--shadow-card); }
+.hm .btn--clear { background: color-mix(in oklab, var(--color-light) 80%, transparent); color: var(--color-ink); box-shadow: var(--edge-light), 0 0 0 1px var(--color-rule), var(--shadow-card); }
+@media (hover: hover) and (pointer: fine) { .hm .btn--accent:hover { background: var(--color-accent-hi); } .hm .btn--clear:hover { background: var(--color-light); } }
+.hm .btn:active { transform: scale(0.97); }
+.hm .btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.hm .btn:disabled { background: var(--color-paper-3); color: var(--color-muted); box-shadow: none; cursor: not-allowed; }
+.hm-input:disabled { background: var(--color-paper-2); color: var(--color-muted); cursor: not-allowed; }
+.hm .btn svg { flex-shrink: 0; }
+
+/* ---------- Chrome: a banner (the source line) over a bar that retracts on scroll ---------- */
+.hm-banner { background: var(--color-paper-2); border-bottom: 1px solid var(--color-rule); font-size: var(--text-xs); color: var(--color-ink-2); padding-block: var(--space-2xs); }
+.hm-banner .container { display: flex; }
+.hm-banner span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.hm-bar { position: sticky; top: 0; z-index: var(--z-sticky-nav); background: var(--color-paper); border-bottom: 1px solid var(--color-rule); transition: transform var(--dur-short) var(--ease-out); }
+.hm-bar[data-hidden='true'] { transform: translateY(-100%); }
+.hm-bar-inner { display: flex; align-items: center; gap: var(--space-md); min-height: 64px; }
+.hm-links { display: flex; gap: var(--space-lg); margin-left: auto; margin-right: var(--space-sm); }
+.hm-links a { font-size: var(--text-sm); font-weight: 500; text-decoration: none; color: var(--color-ink-2); padding-block: var(--space-xs); transition: color var(--dur-short) var(--ease-out); }
+.hm-links a:hover { color: var(--color-accent); }
+.hm-bar .btn { min-height: 40px; padding-inline: var(--space-md); }
+
+/* ---------- Hero: Counter. The head, the lead that says what WCAG is, and the ask field on plain paper; one real answer lies in the light ---------- */
+.hm-hero { position: relative; overflow: clip; min-height: calc(100svh - 96px); display: grid; align-items: center; padding-block: var(--space-2xl) var(--space-3xl); }
+.hm-hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: center; }
+.hm-hero-text .lead { max-width: 58ch; }
+.hm-hero-text { display: grid; gap: var(--space-lg); justify-items: start; }
+/* The head breaks where the copy says (the '|'), not where balancing would: two phrases, two lines. */
+.hm-hero-text h1 { text-wrap: wrap; max-width: none; }
+.hm-askform { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-xs); width: 100%; max-width: 640px; }
+.hm-input { min-width: 0; min-height: 48px; padding: 0 var(--space-lg); border: 1px solid var(--color-muted); border-radius: var(--radius-pill); background: var(--color-light); color: var(--color-ink); font: inherit; font-size: var(--text-md); box-shadow: var(--edge-light), var(--shadow-card); }
+.hm-input::placeholder { color: var(--color-muted); }
+.hm-input:focus-visible { outline: none; border-color: var(--color-focus); box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-focus) 28%, transparent); }
+.hm-askform .btn { min-height: 48px; }
+.hm-try { display: grid; gap: var(--space-xs); }
+.hm-try ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+
+/* The signature: one real answer as a clear panel in the light, read top to bottom as the desk shows it: the question, the sentence with its key figures marked, the facts as pills, the W3C sentence in a paper well, the check. One rise, once. */
+.hm-figure { margin: 0; display: grid; gap: var(--space-sm); animation: hm-rise 420ms var(--ease-out) 160ms backwards; }
+.hm-sample { display: grid; gap: var(--space-sm); padding: var(--space-lg) var(--space-xl); }
+.hm-sample-label { font-size: var(--text-sm); color: var(--color-muted); font-weight: 500; }
+.hm-sample-q { font-weight: 500; color: var(--color-muted); }
+.hm-sample-a { font-size: var(--text-lg); font-weight: 500; line-height: 1.45; color: var(--color-ink); }
+.hm:lang(zh) .hm-sample-a { letter-spacing: 0; line-break: strict; line-height: 1.6; }
+.hm-sample-quote { margin: 0; padding: var(--space-sm) var(--space-md); background: var(--color-paper-2); border-radius: var(--radius-inner); }
+.hm-sample-quote p { color: var(--color-ink-2); font-size: var(--text-sm); line-height: 1.6; }
+.hm-sample-quote mark { background: transparent; color: var(--color-ink); text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 0.12em; text-underline-offset: 0.16em; text-decoration-skip-ink: none; }
+.hm-sample-src { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); }
+.hm-figure figcaption { font-size: var(--text-sm); color: var(--color-muted); max-width: 56ch; }
+@keyframes hm-rise { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------- Sections ---------- */
+.hm-section { padding-block: var(--section-gap); }
+.hm-section--band { background: var(--color-paper-2); }
+.hm-head { display: grid; gap: var(--space-md); margin-bottom: var(--space-2xl); }
+
+/* Rows parted by hairlines (what WCAG is; what it runs on): the term left, the explanation right */
+.hm-rows { border-top: 1px solid var(--color-rule); }
+.hm-row { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-columns); padding-block: var(--space-xl); border-bottom: 1px solid var(--color-rule); align-items: baseline; }
+.hm-row h3 { grid-column: 1 / 5; }
+.hm-row p { grid-column: 5 / 13; color: var(--color-ink-2); max-width: 60ch; font-size: var(--text-lg); line-height: 1.55; }
+.hm:lang(zh) .hm-row p { line-height: 1.75; }
+
+/* The five steps as a timetable: numbered lanes on one rule, the number carrying the order and nothing else coloured */
+.hm-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--gap-columns); border-top: 1px solid var(--color-rule); }
+.hm-step { display: grid; gap: var(--space-xs); align-content: start; padding-top: var(--space-lg); }
+.hm-step-n { font-family: var(--font-display); font-weight: 300; font-size: var(--text-xl); line-height: 1; color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.hm-step h3 { font-family: var(--font-body); font-size: var(--text-lg); font-weight: 500; letter-spacing: 0; line-height: 1.3; }
+.hm-step p { color: var(--color-ink-2); }
+
+/* Moments: one screen held sticky while short numbered panels pass it */
+.hm-pinned { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-3xl); }
+.hm-pin { position: sticky; top: 104px; align-self: start; }
+.hm-pin-stack { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+.hm-pin-stack img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; opacity: 0; transition: opacity var(--dur-short) var(--ease-out); }
+.hm-pin-stack img[data-on='true'] { opacity: 1; }
+.hm-panels { display: grid; grid-template-columns: minmax(0, 1fr); }
+.hm-panel { min-width: 0; min-height: 50vh; display: grid; align-content: center; gap: var(--space-sm); padding-block: var(--space-lg); border-top: 1px solid var(--color-rule); }
+.hm-panel:first-child { border-top: 0; }
+.hm-panel-n { font-family: var(--font-display); font-weight: 300; font-size: var(--text-xl); color: var(--color-muted); transition: color var(--dur-short) var(--ease-out); }
+.hm-panel[data-on='true'] .hm-panel-n { color: var(--color-accent); }
+.hm-panel p { color: var(--color-ink-2); max-width: 40ch; }
+.hm-panel-shot { display: none; }
+
+/* The passage beside the answer: two columns, each with its sheet and one figure beneath */
+.hm-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2xl); align-items: start; }
+.hm-compare-col { display: grid; gap: var(--space-sm); }
+.hm-compare-col > h3 { font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500; color: var(--color-muted); letter-spacing: 0; }
+.hm-sheet { padding: var(--space-xl); font-size: var(--text-sm); line-height: 1.75; display: grid; gap: var(--space-md); }
+.hm-sheet h4 { margin: 0; font-family: var(--font-body); font-size: var(--text-md); font-weight: 500; letter-spacing: 0; color: var(--color-ink); }
+.hm-sheet p { color: var(--color-ink-2); max-width: 72ch; }
+.hm-sheet-link { font-size: var(--text-sm); justify-self: start; }
+.hm-count { display: flex; align-items: baseline; gap: var(--space-sm); padding-top: var(--space-sm); border-top: 1px solid var(--color-rule); }
+.hm-count .fig { font-size: var(--text-xl); line-height: 1; }
+
+/* Figures: three real numbers in the light display weight, parted by hairlines, a footnote on the measured one */
+.hm-figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--color-rule); }
+.hm-figures > div { display: grid; gap: var(--space-sm); align-content: start; padding: var(--space-xl) var(--space-xl) 0; }
+.hm-figures > div:first-child { padding-left: 0; }
+.hm-figures > div + div { border-left: 1px solid var(--color-rule); }
+.hm-figures .fig { font-size: var(--text-display-s); line-height: 1; letter-spacing: -0.04em; }
+.hm-figures p { max-width: 32ch; color: var(--color-ink-2); }
+.hm-sup { font-size: 0.4em; vertical-align: super; margin-left: 0.15em; font-family: var(--font-body); font-weight: 500; letter-spacing: 0; }
+.hm-sup a { text-decoration: none; color: var(--color-muted); }
+.hm-sup a:hover { color: var(--color-accent); text-decoration: underline; }
+
+/* Close: the light once more (the second and last lit ground), the questions as clear cards beside one last screen */
+.hm-close { position: relative; overflow: clip; padding-block: var(--section-gap-s); background: var(--color-paper-2); }
+.hm-close-grid { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-3xl); align-items: center; }
+.hm-close-text { display: grid; gap: var(--space-lg); }
+.hm-questions { display: grid; gap: var(--space-sm); }
+.hm-q { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding: var(--space-md) var(--space-lg); min-height: 64px; border-radius: var(--radius-inner); text-decoration: none; font-weight: 500; font-size: var(--text-lg); color: var(--color-ink); transition: transform var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .hm-q:hover { transform: translateY(-2px); box-shadow: var(--edge-light), var(--shadow-cast); } }
+.hm-q:active { transform: scale(0.99); }
+.hm-q:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.hm-q svg { flex-shrink: 0; color: var(--color-accent); }
+.hm-close-shot { overflow: hidden; }
+
+/* Footer: index columns, the colophon and the notices beneath */
+.hm-footer { padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid var(--color-rule); }
+.hm-footer-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap-columns); row-gap: var(--space-2xl); }
+.hm-footer-col { grid-column: span 3; display: grid; gap: var(--space-xs); align-content: start; }
+.hm-footer-col h3 { font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500; color: var(--color-muted); letter-spacing: 0; margin-bottom: var(--space-xs); }
+.hm-footer-col a { text-decoration: none; padding-block: 2px; font-weight: 500; color: var(--color-ink-2); transition: color var(--dur-short) var(--ease-out); }
+.hm-footer-col a:hover { color: var(--color-accent); text-decoration: underline; }
+.hm-footer-text { grid-column: 1 / 9; display: grid; gap: var(--space-sm); }
+.hm-footer-text p { color: var(--color-ink-2); max-width: 70ch; }
+
+/* ---------- Under 60rem every composition stacks in reading order; the light rests on phones ---------- */
+@media (max-width: 60rem) {
+  .hm-links { display: none; }
+  .hm-bar-inner { gap: var(--space-sm); }
+  .hm-bar-inner > :nth-child(3) { margin-left: auto; }
+  .hm-light { display: none; }
+  .hm-hero { min-height: 0; padding-block: var(--space-xl) var(--space-2xl); }
+  .hm-hero-grid, .hm-compare, .hm-pinned, .hm-close-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
+  .hm-sample { padding: var(--space-md) var(--space-lg); }
+  .hm-head { margin-bottom: var(--space-xl); }
+  .hm-steps { grid-template-columns: minmax(0, 1fr); }
+  .hm-step { grid-template-columns: 2.5rem minmax(0, 1fr); column-gap: var(--space-sm); row-gap: var(--space-2xs); padding-block: var(--space-md); border-bottom: 1px solid var(--color-rule); }
+  .hm-step-n { grid-row: 1 / span 2; }
+  .hm-figures { grid-template-columns: minmax(0, 1fr); }
+  .hm-figures > div { padding: var(--space-lg) 0; }
+  .hm-figures > div + div { border-left: 0; border-top: 1px solid var(--color-rule); }
+  .hm-pin { display: none; }
+  .hm-panel { min-height: 0; }
+  .hm-panel-shot { display: block; margin-top: var(--space-sm); overflow: hidden; }
+  .hm-row { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-xs); }
+  .hm-row h3, .hm-row p { grid-column: 1 / -1; }
+  .hm-footer-col { grid-column: span 6; }
+  .hm-footer-text { grid-column: 1 / -1; }
+  .hm-sheet { padding: var(--space-lg); }
+}
+@media (max-width: 40rem) {
+  .hm-bar .btn--accent { display: none; }
+  .hm-askform { grid-template-columns: minmax(0, 1fr); }
+  .hm-askform .btn { width: 100%; }
+  /* The example questions become a rail: one row that scrolls sideways, each chip whole. */
+  .hm-try ul { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) var(--space-xs); scrollbar-width: thin; }
+  .hm-q { font-size: var(--text-md); }
+  .hm-footer-col { grid-column: 1 / -1; }
+  .hm-banner { display: none; }
+}
+
+/* Reduced motion: the finished scene and one still frame of the light, nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  .hm *, .hm *::before, .hm *::after { animation: none !important; transition: none !important; }
+}
