@@ -1,8 +1,3 @@
-<p align="right">
-  <a href="README.md"><img alt="English" src="https://img.shields.io/badge/English-0969DA?style=for-the-badge"></a>
-  <a href="README.zh-CN.md"><img alt="简体中文" src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-8C959F?style=for-the-badge"></a>
-</p>
-
 # Cairn
 
 A desk that answers questions from an organisation's own published rules and quotes them word for word. Ask in English or Chinese; the answer names the page, gives the bottom line with its deadline, and the server checks every quote against the page before you see it.
