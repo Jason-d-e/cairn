@@ -1,7 +1,7 @@
 // Retrieval evaluation: which page does each method put first, in the top 3 and top 5?
 // Metrics per method and language: hit@1, hit@3, hit@5 and MRR@10 (by page, any gold one counts).
 // A question's optional campus narrows the search as the desk does once a student has picked a campus.
-// Usage: npm run eval:retrieval   (the 'translate' method makes one small model call per Chinese question;
+// Usage: npm run eval:retrieval [-- --set student]   (student: the real student questions, written to student-retrieval-<date>; the 'translate' method makes one small model call per Chinese question;
 // everything else is local; writes eval/results/retrieval-<date>.json and .md)
 import fs from 'node:fs'
 import path from 'node:path'
@@ -11,7 +11,10 @@ import { rerank } from '../lib/rerank.js'
 import { translateQuery } from '../lib/translate.js'
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const { questions } = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'eval', 'retrieval-questions.json'), 'utf8'))
+const SET = process.argv.includes('--set') ? process.argv[process.argv.indexOf('--set') + 1] : 'team'
+const qfile = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'eval', 'retrieval-questions.json'), 'utf8'))
+const questions = SET === 'student' ? qfile.student : qfile.questions
+const PREFIX = SET === 'student' ? 'student-retrieval' : 'retrieval' // the Evaluation page reads retrieval-*.json, the team set
 const db = await loadIndex(path.join(APP_DIR, 'data', 'index.json'))
 
 const METHODS = {
@@ -37,7 +40,7 @@ for (const [name, run] of Object.entries(METHODS)) {
 
 const summary = []
 for (const name of Object.keys(METHODS)) {
-  for (const lang of ['en', 'zh', 'all']) {
+  for (const lang of [...new Set(questions.map((q) => q.lang))].filter((l) => ['en', 'zh'].includes(l) || SET === 'student').concat('all')) {
     const r = rows.filter((x) => x.method === name && (lang === 'all' || x.lang === lang))
     const at = (k) => r.filter((x) => x.rank && x.rank <= k).length
     const mrr = r.reduce((s, x) => s + (x.rank ? 1 / x.rank : 0), 0) / r.length
@@ -48,10 +51,10 @@ for (const name of Object.keys(METHODS)) {
 const day = new Date().toLocaleDateString('sv-SE') // the local day, YYYY-MM-DD
 const out = path.join(APP_DIR, 'eval', 'results')
 fs.mkdirSync(out, { recursive: true })
-fs.writeFileSync(path.join(out, `retrieval-${day}.json`), JSON.stringify({ summary, rows }, null, 1))
+fs.writeFileSync(path.join(out, `${PREFIX}-${day}.json`), JSON.stringify({ summary, rows }, null, 1))
 const table = ['| Method | Questions | Hit@1 | Hit@3 | Hit@5 | MRR@10 |', '| --- | --- | --- | --- | --- | --- |',
   ...summary.map((s) => `| ${s.method} | ${s.lang} (${s.n}) | ${s.hit1} | ${s.hit3} | ${s.hit5} | ${s.mrr} |`)].join('\n')
-fs.writeFileSync(path.join(out, `retrieval-${day}.md`), `# Retrieval evaluation, ${day}\n\n${table}\n`)
+fs.writeFileSync(path.join(out, `${PREFIX}-${day}.md`), `# Retrieval evaluation${SET === 'student' ? ', real student questions' : ''}, ${day}\n\n${table}\n`)
 console.log(table)
 const IN_USE = 'translate + vector + rerank'
 const misses = rows.filter((x) => x.method === IN_USE && (!x.rank || x.rank > 3))

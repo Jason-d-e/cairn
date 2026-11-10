@@ -1,7 +1,7 @@
 // How well does the local engine (no model) answer the evaluation questions? For each question: the status, whether the
 // bottom line's page is a gold page, and the best sentence score, so the threshold in lib/local.js can be set honestly.
 // Also runs a few questions the pages do not cover, to see what scores they reach.
-// Usage: node scripts/eval-local.js   (no model calls, no cost; about three minutes)
+// Usage: node scripts/eval-local.js [--set student]   (no model calls, no cost; about three minutes; student: the real student questions and the ones the pages do not answer)
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -9,7 +9,9 @@ import { loadKnowledge } from '../lib/pipeline.js'
 import { answerLocally, THRESHOLD } from '../lib/local.js'
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const { questions } = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'eval', 'retrieval-questions.json'), 'utf8'))
+const SET = process.argv.includes('--set') ? process.argv[process.argv.indexOf('--set') + 1] : 'team'
+const qfile = JSON.parse(fs.readFileSync(path.join(APP_DIR, 'eval', 'retrieval-questions.json'), 'utf8'))
+const questions = SET === 'student' ? qfile.student : qfile.questions
 const NEGATIVE = [
   { id: 'neg-01', lang: 'en', campus: 'my', q: 'How do I apply for a parking permit for my car?' },
   { id: 'neg-02', lang: 'en', campus: 'au', q: 'What is the wifi password on campus?' },
@@ -19,7 +21,7 @@ const NEGATIVE = [
 ]
 const kb = await loadKnowledge()
 const rows = []
-for (const item of [...questions, ...NEGATIVE]) {
+for (const item of [...questions, ...(SET === 'student' ? qfile.outside : NEGATIVE)]) {
   const t0 = Date.now()
   const r = await answerLocally(kb, item.q, { campus: item.campus })
   const top = r.meta.sentence_scores[0]
@@ -34,4 +36,4 @@ console.log(`\nthreshold ${THRESHOLD}: answered ${answered.length}/${pos.length}
 console.log('negative questions:', rows.filter((r) => r.hit === null).map((r) => `${r.id} ${r.status} top=${r.top?.toFixed(2)}`).join('; '))
 const day = new Date().toLocaleDateString('sv-SE')
 fs.mkdirSync(path.join(APP_DIR, 'eval', 'results'), { recursive: true })
-fs.writeFileSync(path.join(APP_DIR, 'eval', 'results', `local-${day}.json`), JSON.stringify({ threshold: THRESHOLD, rows }, null, 1))
+fs.writeFileSync(path.join(APP_DIR, 'eval', 'results', `${SET === 'student' ? 'student-local' : 'local'}-${day}.json`), JSON.stringify({ threshold: THRESHOLD, rows }, null, 1))

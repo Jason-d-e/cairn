@@ -1,5 +1,5 @@
 {
-  "note": "Questions a Monash student would ask about special consideration, exams, withdrawing, dates and DSS. Written by the team on 2026-11-10 from the pages in the corpus; gold = page ids that answer the question (any one counts). 'campus' narrows the search the way the desk does when a student picks a campus first; questions without it are searched across every campus. Real student questions are added as they arrive, marked source 'student'.",
+  "note": "Questions a Monash student would ask about special consideration, exams, withdrawing, dates and DSS. Written by the team on 2026-11-10 from the pages in the corpus; gold = page ids that answer the question (any one counts). 'campus' narrows the search the way the desk does when a student picks a campus first; questions without it are searched across every campus. 'student' holds real questions from classmates, collected on 2026-11-11, copied as written with names, student IDs and medical details removed, and published with their consent; they are scored separately (npm run eval:retrieval -- --set student) so the team set's numbers stay comparable. 'outside' holds the student questions these pages do not answer; the local-engine run with --set student checks that the desk says it cannot answer them.",
   "questions": [
     { "id": "en-01", "lang": "en", "source": "team", "q": "I was sick on the day of my exam. Can I defer it?", "gold": ["all-sc-defer"] },
     { "id": "en-02", "lang": "en", "source": "team", "q": "What is the deadline to apply for special consideration?", "gold": ["all-sc-overview", "all-sc-defer"] },
@@ -46,5 +46,29 @@
     { "id": "zh-18", "lang": "zh", "source": "team", "q": "成绩什么时候公布？", "gold": ["all-results", "my-results", "my-exams-faq"] },
     { "id": "zh-19", "lang": "zh", "source": "team", "q": "要照顾生病的家人，学生可以申请什么支持？", "gold": ["my-disability-carers", "au-disability-carers"] },
     { "id": "zh-20", "lang": "zh", "source": "team", "campus": "my", "q": "WD-LATE 和 WD-FAIL 是什么意思？", "gold": ["my-withdrawal-faq-business"] }
+  ],
+  "student": [
+    { "id": "st-01", "lang": "zh", "source": "student", "campus": "my", "q": "考试那天生病了（具体病情已删）没去考，还能申请 defer 吗？要交什么证明？", "gold": ["all-sc-defer", "all-sc-documents"] },
+    { "id": "st-03", "lang": "zh", "source": "student", "campus": "my", "q": "过了 census date 退课 学费还能退吗", "gold": ["all-withdrawal-units", "all-withdrawal-special-circumstances", "all-dates-census"] },
+    { "id": "st-04", "lang": "en", "source": "student", "campus": "au", "q": "When's the last day to drop a unit without it showing as WN?", "gold": ["all-dates-census", "au-dates-principal", "all-withdrawal-units"] },
+    { "id": "st-05", "lang": "zh", "source": "student", "campus": "my", "q": "我和室友（姓名已删）都是两门期末考撞时间了，怎么办", "gold": ["my-exams-faq"] },
+    { "id": "st-07", "lang": "zh", "source": "student", "campus": "id", "q": "eExam 考到一半断网了，算缺考吗？", "gold": ["all-exams-troubleshooting", "all-sc-documents"] },
+    { "id": "st-08", "lang": "en", "source": "student", "campus": "my", "q": "how many days after the due date can i still apply for an extension", "gold": ["all-sc-overview"] },
+    { "id": "st-09", "lang": "zh", "source": "student", "campus": "my", "q": "我（学号已删）想申请休学，表在哪下载？要谁签字？", "gold": ["my-enrolment-intermission", "all-withdrawal-intermission"] },
+    { "id": "st-10", "lang": "en", "source": "student", "campus": "au", "q": "If I withdraw after census because of a family emergency, can I get the fees back?", "gold": ["all-withdrawal-special-circumstances", "all-sc-overview"] },
+    { "id": "st-11", "lang": "zh", "source": "student", "campus": "my", "q": "补考成绩什么时候出？", "gold": ["all-exams-supplementary", "my-results", "all-results"] },
+    { "id": "st-12", "lang": "en", "source": "student", "campus": "my", "q": "Can I bring a paper dictionary into the exam if English isn't my first language?", "gold": ["all-exams-rules"] },
+    { "id": "st-13", "lang": "zh", "source": "student", "campus": "my", "q": "注册 DSS 要多久才生效？下周就考试来得及吗？", "gold": ["my-disability-register", "my-exams-special-arrangements"] },
+    { "id": "st-14", "lang": "en", "source": "student", "campus": "id", "q": "Is an extension for a group assignment given to one person or the whole group?", "gold": ["all-sc-overview"] },
+    { "id": "st-18", "lang": "zh", "source": "student", "q": "墨尔本和马来西亚校区的考试周是同一周吗？", "gold": ["all-exams-final-periods", "my-dates-principal", "au-dates-principal"] },
+    { "id": "st-19", "lang": "en", "source": "student", "campus": "my", "q": "Can special consideration be used for a quiz worth only 5%?", "gold": ["all-sc-overview"] },
+    { "id": "st-20", "lang": "ms", "source": "student", "campus": "my", "q": "Boleh saya tukar tarikh peperiksaan kalau ada pertandingan sukan?", "gold": ["all-sc-defer", "all-sc-overview", "all-sc-documents"] }
+  ],
+  "outside": [
+    { "id": "st-02", "lang": "en", "source": "student", "campus": "my", "q": "if my special consideration gets rejected can i appeal or is that it" },
+    { "id": "st-06", "lang": "en", "source": "student", "campus": "my", "q": "Do I need a new doctor's letter every semester to keep my exam adjustments?" },
+    { "id": "st-15", "lang": "zh", "source": "student", "campus": "my", "q": "学校停车证怎么申请？" },
+    { "id": "st-16", "lang": "en", "source": "student", "campus": "my", "q": "Is the library open 24 hours during exam week?" },
+    { "id": "st-17", "lang": "zh", "source": "student", "campus": "my", "q": "我想转专业，已经交的学费怎么算？" }
   ]
 }

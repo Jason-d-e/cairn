@@ -1,0 +1,185 @@
+{
+ "threshold": 0.5,
+ "rows": [
+  {
+   "id": "st-01",
+   "lang": "zh",
+   "status": "answered",
+   "page": "all-sc-defer",
+   "hit": true,
+   "top": 2.6443,
+   "ms": 3594
+  },
+  {
+   "id": "st-03",
+   "lang": "zh",
+   "status": "answered",
+   "page": "my-withdrawal-faq-business",
+   "hit": false,
+   "top": 4.0765,
+   "ms": 2290
+  },
+  {
+   "id": "st-04",
+   "lang": "en",
+   "status": "answered",
+   "page": "au-dates-principal",
+   "hit": true,
+   "top": 2.5255,
+   "ms": 1499
+  },
+  {
+   "id": "st-05",
+   "lang": "zh",
+   "status": "not_covered",
+   "page": null,
+   "hit": false,
+   "top": -3.4881,
+   "ms": 2162
+  },
+  {
+   "id": "st-07",
+   "lang": "zh",
+   "status": "answered",
+   "page": "all-exams-eexams-off-campus",
+   "hit": false,
+   "top": 1.4218,
+   "ms": 2280
+  },
+  {
+   "id": "st-08",
+   "lang": "en",
+   "status": "answered",
+   "page": "all-sc-overview",
+   "hit": true,
+   "top": 3.8963,
+   "ms": 1236
+  },
+  {
+   "id": "st-09",
+   "lang": "zh",
+   "status": "not_covered",
+   "page": null,
+   "hit": false,
+   "top": 0.4634,
+   "ms": 2419
+  },
+  {
+   "id": "st-10",
+   "lang": "en",
+   "status": "answered",
+   "page": "all-withdrawal-units",
+   "hit": false,
+   "top": 3.7679,
+   "ms": 1598
+  },
+  {
+   "id": "st-11",
+   "lang": "zh",
+   "status": "answered",
+   "page": "all-exams-final-periods",
+   "hit": false,
+   "top": 6.9315,
+   "ms": 2568
+  },
+  {
+   "id": "st-12",
+   "lang": "en",
+   "status": "not_covered",
+   "page": null,
+   "hit": false,
+   "top": -3.637,
+   "ms": 1112
+  },
+  {
+   "id": "st-13",
+   "lang": "zh",
+   "status": "not_covered",
+   "page": null,
+   "hit": false,
+   "top": -1.5878,
+   "ms": 2245
+  },
+  {
+   "id": "st-14",
+   "lang": "en",
+   "status": "answered",
+   "page": "all-sc-overview",
+   "hit": true,
+   "top": 3.3156,
+   "ms": 1316
+  },
+  {
+   "id": "st-18",
+   "lang": "zh",
+   "status": "not_covered",
+   "page": null,
+   "hit": false,
+   "top": -4.4297,
+   "ms": 2609
+  },
+  {
+   "id": "st-19",
+   "lang": "en",
+   "status": "not_covered",
+   "page": null,
+   "hit": false,
+   "top": -2.3129,
+   "ms": 1243
+  },
+  {
+   "id": "st-20",
+   "lang": "ms",
+   "status": "not_covered",
+   "page": null,
+   "hit": false,
+   "top": -4.4084,
+   "ms": 1521
+  },
+  {
+   "id": "st-02",
+   "lang": "en",
+   "status": "not_covered",
+   "page": null,
+   "hit": null,
+   "top": 0.3997,
+   "ms": 1292
+  },
+  {
+   "id": "st-06",
+   "lang": "en",
+   "status": "not_covered",
+   "page": null,
+   "hit": null,
+   "top": -3.7325,
+   "ms": 1322
+  },
+  {
+   "id": "st-15",
+   "lang": "zh",
+   "status": "answered",
+   "page": "my-disability-parking",
+   "hit": null,
+   "top": 3.5757,
+   "ms": 2290
+  },
+  {
+   "id": "st-16",
+   "lang": "en",
+   "status": "not_covered",
+   "page": null,
+   "hit": null,
+   "top": -3.558,
+   "ms": 1451
+  },
+  {
+   "id": "st-17",
+   "lang": "zh",
+   "status": "not_covered",
+   "page": null,
+   "hit": null,
+   "top": -3.1966,
+   "ms": 2246
+  }
+ ]
+}

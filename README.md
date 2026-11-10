@@ -45,7 +45,7 @@ An entry to LaunchPad Hacks 2026 by Jason Liang and ZIzi821.
 
 ## Measured results
 
-These are measurements, not accuracy claims. The 45 evaluation questions were written by the team the way students ask them; no users have tested the product yet.
+These are measurements, not accuracy claims. The 45 evaluation questions were written by the team the way students ask them; 20 real student questions were added on 11 November 2026 and are reported separately. No users have tested the product itself yet.
 
 **Retrieval evaluation**, 45 questions (25 English, 20 Chinese), each labelled with the Monash page that answers it, 10 November 2026 (`npm run eval:retrieval`):
 
@@ -60,6 +60,9 @@ These are measurements, not accuracy claims. The 45 evaluation questions were wr
 | **Translate + vector + rerank (in use)** | **34** | **41** | **44** | **0.839** |
 
 The translation step matters for Chinese: with it, 19 of the 20 Chinese questions have the right page in the top five (MRR 0.858); without it, 18 (MRR 0.685). The four questions not in the top three are listed in `eval/results/retrieval-2026-11-10.md`.
+
+**Real student questions**, 11 November 2026 (`npm run eval:retrieval -- --set student`). Classmates gave 20 questions in their own words (10 Chinese, 9 English, 1 Malay), copied as written with names and medical details removed and published with their consent. 15 have an answer in the 58 pages; 5 do not (appealing a special consideration decision, a new doctor's letter every semester, a parking permit, library hours, fees after changing course). On the 15, the method in use put the right page first for 9, in the top three for 13 and in the top five for 14 (MRR 0.724, against 0.839 on the team's questions): real wording is harder. The two it missed are an eExam that lost its internet connection and the Malay question. They are scored as their own set, so the table above stays comparable.
+
 
 **Smoke test**, 7 live questions through the running server, 10 November 2026, Claude Haiku 5.5 (`node scripts/smoke.js`):
 

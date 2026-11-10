@@ -1,0 +1,993 @@
+{
+ "summary": [
+  {
+   "method": "keyword (BM25)",
+   "lang": "zh",
+   "n": 8,
+   "hit1": 1,
+   "hit3": 2,
+   "hit5": 2,
+   "mrr": 0.188
+  },
+  {
+   "method": "keyword (BM25)",
+   "lang": "en",
+   "n": 6,
+   "hit1": 0,
+   "hit3": 3,
+   "hit5": 4,
+   "mrr": 0.256
+  },
+  {
+   "method": "keyword (BM25)",
+   "lang": "ms",
+   "n": 1,
+   "hit1": 0,
+   "hit3": 0,
+   "hit5": 0,
+   "mrr": 0
+  },
+  {
+   "method": "keyword (BM25)",
+   "lang": "all",
+   "n": 15,
+   "hit1": 1,
+   "hit3": 5,
+   "hit5": 6,
+   "mrr": 0.202
+  },
+  {
+   "method": "vector",
+   "lang": "zh",
+   "n": 8,
+   "hit1": 3,
+   "hit3": 4,
+   "hit5": 5,
+   "mrr": 0.469
+  },
+  {
+   "method": "vector",
+   "lang": "en",
+   "n": 6,
+   "hit1": 6,
+   "hit3": 6,
+   "hit5": 6,
+   "mrr": 1
+  },
+  {
+   "method": "vector",
+   "lang": "ms",
+   "n": 1,
+   "hit1": 0,
+   "hit3": 1,
+   "hit5": 1,
+   "mrr": 0.5
+  },
+  {
+   "method": "vector",
+   "lang": "all",
+   "n": 15,
+   "hit1": 9,
+   "hit3": 11,
+   "hit5": 12,
+   "mrr": 0.683
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "lang": "zh",
+   "n": 8,
+   "hit1": 2,
+   "hit3": 4,
+   "hit5": 4,
+   "mrr": 0.375
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "lang": "en",
+   "n": 6,
+   "hit1": 0,
+   "hit3": 5,
+   "hit5": 5,
+   "mrr": 0.417
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "lang": "ms",
+   "n": 1,
+   "hit1": 0,
+   "hit3": 1,
+   "hit5": 1,
+   "mrr": 0.5
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "lang": "all",
+   "n": 15,
+   "hit1": 2,
+   "hit3": 10,
+   "hit5": 10,
+   "mrr": 0.4
+  },
+  {
+   "method": "hybrid, RRF",
+   "lang": "zh",
+   "n": 8,
+   "hit1": 3,
+   "hit3": 4,
+   "hit5": 4,
+   "mrr": 0.438
+  },
+  {
+   "method": "hybrid, RRF",
+   "lang": "en",
+   "n": 6,
+   "hit1": 6,
+   "hit3": 6,
+   "hit5": 6,
+   "mrr": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "lang": "ms",
+   "n": 1,
+   "hit1": 0,
+   "hit3": 1,
+   "hit5": 1,
+   "mrr": 0.5
+  },
+  {
+   "method": "hybrid, RRF",
+   "lang": "all",
+   "n": 15,
+   "hit1": 9,
+   "hit3": 11,
+   "hit5": 11,
+   "mrr": 0.667
+  },
+  {
+   "method": "vector + rerank",
+   "lang": "zh",
+   "n": 8,
+   "hit1": 2,
+   "hit3": 5,
+   "hit5": 5,
+   "mrr": 0.417
+  },
+  {
+   "method": "vector + rerank",
+   "lang": "en",
+   "n": 6,
+   "hit1": 5,
+   "hit3": 6,
+   "hit5": 6,
+   "mrr": 0.889
+  },
+  {
+   "method": "vector + rerank",
+   "lang": "ms",
+   "n": 1,
+   "hit1": 0,
+   "hit3": 0,
+   "hit5": 1,
+   "mrr": 0.2
+  },
+  {
+   "method": "vector + rerank",
+   "lang": "all",
+   "n": 15,
+   "hit1": 7,
+   "hit3": 11,
+   "hit5": 12,
+   "mrr": 0.591
+  },
+  {
+   "method": "RRF + rerank",
+   "lang": "zh",
+   "n": 8,
+   "hit1": 3,
+   "hit3": 4,
+   "hit5": 5,
+   "mrr": 0.463
+  },
+  {
+   "method": "RRF + rerank",
+   "lang": "en",
+   "n": 6,
+   "hit1": 6,
+   "hit3": 6,
+   "hit5": 6,
+   "mrr": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "lang": "ms",
+   "n": 1,
+   "hit1": 0,
+   "hit3": 0,
+   "hit5": 1,
+   "mrr": 0.2
+  },
+  {
+   "method": "RRF + rerank",
+   "lang": "all",
+   "n": 15,
+   "hit1": 9,
+   "hit3": 10,
+   "hit5": 12,
+   "mrr": 0.66
+  },
+  {
+   "method": "translate + vector + rerank",
+   "lang": "zh",
+   "n": 8,
+   "hit1": 4,
+   "hit3": 7,
+   "hit5": 7,
+   "mrr": 0.667
+  },
+  {
+   "method": "translate + vector + rerank",
+   "lang": "en",
+   "n": 6,
+   "hit1": 5,
+   "hit3": 6,
+   "hit5": 6,
+   "mrr": 0.889
+  },
+  {
+   "method": "translate + vector + rerank",
+   "lang": "ms",
+   "n": 1,
+   "hit1": 0,
+   "hit3": 0,
+   "hit5": 1,
+   "mrr": 0.2
+  },
+  {
+   "method": "translate + vector + rerank",
+   "lang": "all",
+   "n": 15,
+   "hit1": 9,
+   "hit3": 13,
+   "hit5": 14,
+   "mrr": 0.724
+  }
+ ],
+ "rows": [
+  {
+   "method": "keyword (BM25)",
+   "id": "st-01",
+   "lang": "zh",
+   "first": "all-assessment-about",
+   "rank": 2
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-03",
+   "lang": "zh",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-04",
+   "lang": "en",
+   "first": "all-disability-alternative-assessment",
+   "rank": 5
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-05",
+   "lang": "zh",
+   "first": null,
+   "rank": null
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-07",
+   "lang": "zh",
+   "first": "all-exams-eexams",
+   "rank": null
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-08",
+   "lang": "en",
+   "first": "all-withdrawal-intermission",
+   "rank": 3
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-09",
+   "lang": "zh",
+   "first": null,
+   "rank": null
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-10",
+   "lang": "en",
+   "first": "au-sc-uhs-certificate",
+   "rank": 6
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-11",
+   "lang": "zh",
+   "first": null,
+   "rank": null
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-12",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": null
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-13",
+   "lang": "zh",
+   "first": "all-sc-documents",
+   "rank": null
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-14",
+   "lang": "en",
+   "first": "all-exams-help",
+   "rank": 3
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-18",
+   "lang": "zh",
+   "first": null,
+   "rank": null
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-19",
+   "lang": "en",
+   "first": "all-disability-alternative-assessment",
+   "rank": 2
+  },
+  {
+   "method": "keyword (BM25)",
+   "id": "st-20",
+   "lang": "ms",
+   "first": null,
+   "rank": null
+  },
+  {
+   "method": "vector",
+   "id": "st-01",
+   "lang": "zh",
+   "first": "all-sc-documents",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-03",
+   "lang": "zh",
+   "first": "all-dates-census",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-04",
+   "lang": "en",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-05",
+   "lang": "zh",
+   "first": "all-enrolment-changes",
+   "rank": null
+  },
+  {
+   "method": "vector",
+   "id": "st-07",
+   "lang": "zh",
+   "first": "all-exams-device-specs",
+   "rank": 4
+  },
+  {
+   "method": "vector",
+   "id": "st-08",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-09",
+   "lang": "zh",
+   "first": "my-admin-hub",
+   "rank": null
+  },
+  {
+   "method": "vector",
+   "id": "st-10",
+   "lang": "en",
+   "first": "all-withdrawal-special-circumstances",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-11",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 2
+  },
+  {
+   "method": "vector",
+   "id": "st-12",
+   "lang": "en",
+   "first": "all-exams-rules",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-13",
+   "lang": "zh",
+   "first": "all-sc-documents",
+   "rank": null
+  },
+  {
+   "method": "vector",
+   "id": "st-14",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-18",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-19",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "vector",
+   "id": "st-20",
+   "lang": "ms",
+   "first": "all-withdrawal-units",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-01",
+   "lang": "zh",
+   "first": "all-assessment-about",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-03",
+   "lang": "zh",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-04",
+   "lang": "en",
+   "first": "all-disability-alternative-assessment",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-05",
+   "lang": "zh",
+   "first": "all-enrolment-changes",
+   "rank": null
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-07",
+   "lang": "zh",
+   "first": "all-exams-eexams",
+   "rank": null
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-08",
+   "lang": "en",
+   "first": "all-withdrawal-intermission",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-09",
+   "lang": "zh",
+   "first": "my-admin-hub",
+   "rank": null
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-10",
+   "lang": "en",
+   "first": "all-disability-alternative-assessment",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-11",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-12",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": null
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-13",
+   "lang": "zh",
+   "first": "all-sc-documents",
+   "rank": null
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-14",
+   "lang": "en",
+   "first": "all-exams-help",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-18",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-19",
+   "lang": "en",
+   "first": "all-disability-alternative-assessment",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, Orama 0.4/0.6",
+   "id": "st-20",
+   "lang": "ms",
+   "first": "all-withdrawal-units",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-01",
+   "lang": "zh",
+   "first": "all-sc-defer",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-03",
+   "lang": "zh",
+   "first": "all-dates-census",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-04",
+   "lang": "en",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-05",
+   "lang": "zh",
+   "first": "all-enrolment-changes",
+   "rank": null
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-07",
+   "lang": "zh",
+   "first": "all-exams-eexams",
+   "rank": null
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-08",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-09",
+   "lang": "zh",
+   "first": "my-admin-hub",
+   "rank": null
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-10",
+   "lang": "en",
+   "first": "all-withdrawal-special-circumstances",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-11",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 2
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-12",
+   "lang": "en",
+   "first": "all-exams-rules",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-13",
+   "lang": "zh",
+   "first": "all-sc-documents",
+   "rank": null
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-14",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-18",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-19",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "hybrid, RRF",
+   "id": "st-20",
+   "lang": "ms",
+   "first": "all-withdrawal-units",
+   "rank": 2
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-01",
+   "lang": "zh",
+   "first": "all-sc-defer",
+   "rank": 1
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-03",
+   "lang": "zh",
+   "first": "all-withdrawal-intermission",
+   "rank": 2
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-04",
+   "lang": "en",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-05",
+   "lang": "zh",
+   "first": "my-exams-eexams-on-campus",
+   "rank": null
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-07",
+   "lang": "zh",
+   "first": "all-exams-device-specs",
+   "rank": 3
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-08",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-09",
+   "lang": "zh",
+   "first": "my-forms-letters",
+   "rank": null
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-10",
+   "lang": "en",
+   "first": "all-withdrawal-units",
+   "rank": 3
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-11",
+   "lang": "zh",
+   "first": "all-exams-supplementary",
+   "rank": 1
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-12",
+   "lang": "en",
+   "first": "all-exams-rules",
+   "rank": 1
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-13",
+   "lang": "zh",
+   "first": "all-sc-documents",
+   "rank": null
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-14",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-18",
+   "lang": "zh",
+   "first": "my-exams-eexams-on-campus",
+   "rank": 2
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-19",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "vector + rerank",
+   "id": "st-20",
+   "lang": "ms",
+   "first": "all-enrolment-changes",
+   "rank": 5
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-01",
+   "lang": "zh",
+   "first": "all-sc-defer",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-03",
+   "lang": "zh",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-04",
+   "lang": "en",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-05",
+   "lang": "zh",
+   "first": "my-exams-eexams-on-campus",
+   "rank": null
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-07",
+   "lang": "zh",
+   "first": "all-exams-device-specs",
+   "rank": 5
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-08",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-09",
+   "lang": "zh",
+   "first": "my-forms-letters",
+   "rank": null
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-10",
+   "lang": "en",
+   "first": "all-withdrawal-special-circumstances",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-11",
+   "lang": "zh",
+   "first": "all-exams-supplementary",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-12",
+   "lang": "en",
+   "first": "all-exams-rules",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-13",
+   "lang": "zh",
+   "first": "all-sc-documents",
+   "rank": null
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-14",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-18",
+   "lang": "zh",
+   "first": "my-exams-eexams-on-campus",
+   "rank": 2
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-19",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "RRF + rerank",
+   "id": "st-20",
+   "lang": "ms",
+   "first": "all-enrolment-changes",
+   "rank": 5
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-01",
+   "lang": "zh",
+   "first": "all-sc-defer",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-03",
+   "lang": "zh",
+   "first": "my-withdrawal-faq-business",
+   "rank": 2
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-04",
+   "lang": "en",
+   "first": "all-withdrawal-units",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-05",
+   "lang": "zh",
+   "first": "my-exams-faq",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-07",
+   "lang": "zh",
+   "first": "all-exams-device-specs",
+   "rank": null
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-08",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-09",
+   "lang": "zh",
+   "first": "all-withdrawal-intermission",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-10",
+   "lang": "en",
+   "first": "all-withdrawal-units",
+   "rank": 3
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-11",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 2
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-12",
+   "lang": "en",
+   "first": "all-exams-rules",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-13",
+   "lang": "zh",
+   "first": "all-disability-alternative-assessment",
+   "rank": 3
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-14",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-18",
+   "lang": "zh",
+   "first": "all-exams-final-periods",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-19",
+   "lang": "en",
+   "first": "all-sc-overview",
+   "rank": 1
+  },
+  {
+   "method": "translate + vector + rerank",
+   "id": "st-20",
+   "lang": "ms",
+   "first": "all-enrolment-changes",
+   "rank": 5
+  }
+ ]
+}
