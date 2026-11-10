@@ -140,7 +140,9 @@ p { margin: 0; text-wrap: pretty; }
 /* The question is the card's heading, in the display face. */
 .cn-asked { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: var(--text-xl); line-height: 1.2; letter-spacing: -0.02em; color: var(--color-ink); max-width: 40ch; text-wrap: balance; }
 /* The settled state carries the accent: the check mark before the status line. */
-.cn-status { display: inline-flex; align-items: center; gap: var(--space-xs); font-weight: 500; color: var(--color-ink); }
+/* The status, the campus and the engine sit on one line and wrap as whole items on a phone. */
+.cn-status { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xs); font-weight: 500; color: var(--color-ink); }
+.cn-status svg { flex-shrink: 0; }
 .cn-status[data-status='answered'] svg { color: var(--color-accent); }
 .cn-status[data-status='withheld'] { color: var(--color-error); }
 .cn-status[data-status='not_covered'], .cn-status[data-status='needs_clarification'] { color: var(--color-ink-2); }
@@ -259,13 +261,14 @@ p { margin: 0; text-wrap: pretty; }
 .cn-fact--sc .cn-fact-title { color: var(--color-ink); font-weight: 500; }
 .cn-fact--sc .cn-level-l { background: var(--color-light); font-weight: 500; }
 /* The campus an answer was made for, after the status, in the quiet colour. */
-.cn-forcampus { margin-left: var(--space-sm); font-weight: 400; color: var(--color-muted); }
+.cn-forcampus { margin-left: var(--space-xs); font-weight: 400; color: var(--color-muted); white-space: nowrap; }
 @media (max-width: 62em) { .cn-askrow { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- The engine: who writes the answer; a choice that is not available stays visible but dimmed ---------- */
 .cn-chip[data-off='true'] { opacity: 0.5; cursor: not-allowed; }
 .cn-chip[data-off='true']:hover { background: color-mix(in oklab, var(--color-light) 80%, transparent); color: var(--color-ink-2); }
-.cn-engine-tag { margin-left: var(--space-sm); }
+/* Which engine answered: a plain label, never a warning colour. */
+.cn-engine-tag { margin-left: var(--space-xs); white-space: nowrap; }
 /* The email to the department: a letter laid out as a sheet inside the answer card. */
 .cn-email-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px var(--space-sm); margin: 0; }
 .cn-email-head dt { font-size: var(--text-sm); color: var(--color-muted); }

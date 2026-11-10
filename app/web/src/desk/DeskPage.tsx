@@ -201,7 +201,6 @@ export default function DeskPage({ active }: { active: boolean }) {
             <section className="cn-card cn-intro" aria-labelledby="intro-title">
               <h2 id="intro-title" className="cn-h3">{t('desk.intro.title')}</h2>
               <p>{t('desk.intro.text')}</p>
-              <p>{t('desk.intro.engines')}</p>
               <a className="cn-link" href="#/?s=what">{t('desk.intro.link')}</a>
             </section>
           )}

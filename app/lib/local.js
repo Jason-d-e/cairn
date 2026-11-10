@@ -2,22 +2,23 @@
 // It cannot write; it chooses. The retrieval stage finds the passages as usual, the passages are split into
 // sentences, the local cross-encoder (bge-reranker-base, already used for reranking) scores every sentence
 // against the question, and the best sentences become the answer: the top one is the bottom line, the next
-// ones the points. Each is quoted word for word from its page, so the usual verification holds by construction.
-// Templates add the page, the campus and the lead-in in the reader's language. No sentence above the threshold
-// means "not covered"; nothing is ever paraphrased or invented.
+// ones the points. Each is the page's own sentence, word for word, so the usual verification holds by
+// construction; the interface shows the page and campus beside it. No sentence above the threshold means
+// "not covered"; nothing is ever paraphrased or invented.
 import { findContext } from './pipeline.js'
 import { rerank } from './rerank.js'
 import { checkAnswer } from './validate.js'
 
-export const LOCAL_VERSION = 'local-extractive-v1'
+export const LOCAL_VERSION = 'local-extractive-v2'
 export const LOCAL_ENGINE = 'local-extractive (bge-reranker-base)'
 /** A sentence scoring below this is not treated as an answer. Calibrated on the evaluation questions; the scores are in eval/results/local-<date>.json. */
 export const THRESHOLD = 0.5
+/** A page whose best sentence scores at least this is still worth naming as "the closest page" when nothing answers. */
+const CLOSE_ENOUGH = -2
 const MAX_SENTENCES = 72
 const POINTS = 3
 
 const isChinese = (q) => /[㐀-鿿]/.test(q)
-const CAMPUS_ZH = { all: '所有校区', au: '澳大利亚校区', my: '马来西亚校区', id: '印度尼西亚校区' }
 
 /** A chunk's text as candidate sentences: list items and table rows whole, prose split at sentence ends, headings dropped. */
 export function splitSentences(text) {
@@ -48,24 +49,19 @@ function candidates(context) {
   return list.slice(0, MAX_SENTENCES)
 }
 
-/** The lead-in and labels, in the language of the question. Quotes stay in English. */
-function templates(question, meta) {
-  const zh = isChinese(question)
-  const campusName = (c) => (zh ? CAMPUS_ZH[c] ?? c : meta.campuses?.[c] ?? c)
-  return {
-    lead: (s) => (zh ? `根据《${s.title}》（${campusName(s.campus)}）：${s.text}` : `From “${s.title}” (${campusName(s.campus).toLowerCase()}): ${s.text}`),
-    // A point is a label for the quote shown under it (page, section, campus); the sentence itself is the quote, not repeated.
-    point: (s) => (zh ? `《${s.title}》· ${s.section}（${campusName(s.campus)}）` : `${s.title} · ${s.section} (${campusName(s.campus).toLowerCase()})`),
-    missing: (best) =>
-      zh
-        ? `本地引擎没有在这些页面里找到能回答这个问题的句子${best ? `（最接近的是《${best.title}》，分数 ${best.rerank_score.toFixed(2)}，低于 ${THRESHOLD}）` : ''}。它只会摘录原句，不会改写或推断。`
-        : `The local engine found no sentence in these pages that answers the question${best ? ` (closest: “${best.title}”, score ${best.rerank_score.toFixed(2)}, below ${THRESHOLD})` : ''}. It only selects sentences; it never paraphrases or infers.`,
-  }
+/**
+ * When no sentence answers, the status line already says so. The one thing worth adding is the closest page,
+ * when there is one; otherwise nothing, and the interface shows its standard line.
+ */
+function notCovered(question, best) {
+  if (!best || best.rerank_score < CLOSE_ENOUGH) return ''
+  return isChinese(question) ? `《${best.title}》，可以先去看看。` : `“${best.title}”. It may be worth a look.`
 }
 
 /**
- * Answer without a model: retrieve, split into sentences, score them locally, template the best ones.
+ * Answer without a model: retrieve, split into sentences, score them locally, return the best ones.
  * Returns the same shape as answerQuestion, so the interface and the checks do not care which engine answered.
+ * The bottom line and every point are the sentences themselves (text and quote are the same string).
  */
 export async function answerLocally(kb, question, { campus } = {}) {
   const { context, trace } = await findContext(kb, question, { campus })
@@ -74,17 +70,16 @@ export async function answerLocally(kb, question, { campus } = {}) {
   // Every sentence is scored on its own against the question. (Blending in the passage's score was tried on the
   // evaluation questions and ranked the right page slightly less often, so the sentence stands alone.)
   const ranked = await rerank(query, candidates(context), POINTS + 1)
-  const t = templates(question, kb.meta)
   const good = ranked.filter((s) => s.rerank_score >= THRESHOLD)
   let parsed
   if (good.length === 0) {
-    parsed = { status: 'not_covered', answer: '', points: [], citations: [], missing_info: t.missing(ranked[0]), clarifying_question: '' }
+    parsed = { status: 'not_covered', answer: '', points: [], citations: [], missing_info: notCovered(question, ranked[0]), clarifying_question: '' }
   } else {
     const [best, ...rest] = good
     parsed = {
       status: 'answered',
-      answer: t.lead(best),
-      points: rest.slice(0, POINTS).map((s) => ({ text: t.point(s), source_id: s.id, quote: s.text })),
+      answer: best.text,
+      points: rest.slice(0, POINTS).map((s) => ({ text: s.text, source_id: s.id, quote: s.text })),
       citations: [{ source_id: best.id, quote: best.text }],
       missing_info: '',
       clarifying_question: '',

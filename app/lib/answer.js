@@ -25,7 +25,7 @@ export async function answerQuestion(kb, question, { campus } = {}) {
     max_tokens: 8000,
     output_config: { effort: config.effort, format: { type: 'json_schema', schema: buildSchema(context.map((c) => c.id)) } },
     system: SYSTEM,
-    messages: [{ role: 'user', content: buildUserMessage(question, context, kb.meta) }],
+    messages: [{ role: 'user', content: buildUserMessage(question, context, kb.meta, campus) }],
   })
   const meta = {
     prompt_version: PROMPT_VERSION,

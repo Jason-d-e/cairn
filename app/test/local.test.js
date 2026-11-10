@@ -30,15 +30,24 @@ test('findContact: the first documented email in the passages, with its source',
 
 test('draftEmail: addressed when the pages give an address, blank and explained when they do not', () => {
   const context = [{ id: 'b#2', doc: 'b', title: 'Disability Support Services', url: 'https://x/b', text: 'Email disabilitysupportservices@monash.edu to register.' }]
-  const e = draftEmail({ question: 'How do I register with DSS?', campus: 'au', campusName: 'Australia', missing_info: 'The form.', context })
+  const e = draftEmail({ question: 'How do I register with DSS?', campusName: 'Australia', context })
   assert.equal(e.to, 'disabilitysupportservices@monash.edu')
   assert.match(e.subject, /Disability Support Services \(Australia\)/)
   assert.match(e.body, /“How do I register with DSS\?”/)
   assert.match(e.body, /- Disability Support Services: https:\/\/x\/b/)
   assert.match(e.mailto, /^mailto:disabilitysupportservices%40monash\.edu\?subject=/)
-  const none = draftEmail({ question: '停车证怎么办？', campus: 'my', campusName: 'Malaysia', missing_info: '', context: [{ id: 'p#1', doc: 'p', title: 'Parking', url: 'https://x/p', text: 'Apply at the office.' }] })
+  const weak = [{ id: 'p#1', doc: 'p', title: 'Parking', url: 'https://x/p', text: 'Apply at the office.', rerank_score: -1.5 }, { id: 'q#1', doc: 'q', title: 'Intermission', url: 'https://x/q', text: 'Unrelated.', rerank_score: -4 }]
+  const none = draftEmail({ question: '停车证怎么办？', campusName: 'Malaysia', context: weak })
   assert.equal(none.to, '')
-  assert.match(none.note, /收件人留空/)
+  assert.match(none.note, /没写邮箱/)
+  assert.match(none.note, /请改成英文/)
+  // Only the closest page is named when the others are not relevant.
+  assert.match(none.body, /The closest page I found:\n- Parking: https:\/\/x\/p/)
+  assert.doesNotMatch(none.body, /Intermission/)
+  // With an English rendering of the question, the letter quotes that and the note no longer asks for a translation.
+  const en = draftEmail({ question: '停车证怎么办？', question_en: 'How do I get a parking permit?', campusName: 'Malaysia', context: weak })
+  assert.match(en.body, /“How do I get a parking permit\?”/)
+  assert.doesNotMatch(en.note, /请改成英文/)
 })
 
 test('threshold is a number the engine respects', () => {

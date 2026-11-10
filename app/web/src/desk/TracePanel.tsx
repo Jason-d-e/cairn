@@ -19,14 +19,17 @@ export default function TracePanel({ result }: { result: AnswerResult }) {
   const campus = trace.campus ? t(`campus.names.${trace.campus}`) : null
   const docs = status?.corpus.documents ?? '…'
 
+  const local = meta.engine === 'local'
   const steps = [
     trace.translated_from
-      ? { title: t('trace.steps.translated.title'), text: t('trace.steps.translated.text', { query: trace.query, model: meta.model_served, embed }) }
+      ? { title: t('trace.steps.translated.title'), text: t('trace.steps.translated.text', { query: trace.query, model: status?.model ?? 'Claude', embed }) }
       : { title: t('trace.steps.question.title'), text: t('trace.steps.question.text', { model: embed, dim: EMBED_DIM }) },
     { title: t('trace.steps.library.title', { chunks: status?.corpus.chunks ?? '…' }), text: campus ? t('trace.steps.libraryCampus.text', { docs, campus }) : t('trace.steps.library.text', { docs }) },
     { title: t('trace.steps.found.title', { n: trace.candidates }), text: t('trace.steps.found.text', { ms: trace.ms.retrieve }) },
     { title: t('trace.steps.kept.title', { n: kept }), text: t(hasRules ? 'trace.steps.kept.textRules' : 'trace.steps.kept.text', { model: reranker, ms: trace.ms.rerank }) },
-    { title: t('trace.steps.written.title'), text: t('trace.steps.written.text', { model: meta.model_served }) },
+    local
+      ? { title: t('trace.steps.picked.title'), text: t('trace.steps.picked.text', { model: reranker, ms: meta.latency_ms }) }
+      : { title: t('trace.steps.written.title'), text: t('trace.steps.written.text', { model: meta.model_served }) },
     { title: t('trace.steps.checked.title'), text: t('trace.steps.checked.text', { verified: checks.quotes_verified, total: checks.quotes_total }) },
   ]
 
@@ -35,7 +38,8 @@ export default function TracePanel({ result }: { result: AnswerResult }) {
     <details className="cn-trace">
       <summary>
         <span className="cn-label">{t('desk.sections.trace')}</span>
-        <span className="small">{t('trace.summary', { candidates: trace.candidates, kept, verified: checks.quotes_verified, total: checks.quotes_total })}</span>
+        {/* The quote count belongs to an answer; a "not covered" or a question back shows only the search. */}
+        <span className="small">{t(checks.quotes_total > 0 && (result.status === 'answered' || result.status === 'withheld') ? 'trace.summary' : 'trace.summaryNoQuotes', { candidates: trace.candidates, kept, verified: checks.quotes_verified, total: checks.quotes_total })}</span>
       </summary>
       <ol className="cn-map">
         {steps.map((s, i) => (

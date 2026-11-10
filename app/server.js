@@ -68,9 +68,11 @@ app.post('/api/ask', async (req, res) => {
     // No answer from the pages: draft the email the reader would send to ask, from the pages and their documented contacts.
     if (result.status === 'not_covered' || result.status === 'withheld') {
       const campusName = campus ? kb.meta.campuses?.[campus] ?? campus : ''
-      const context = result.trace.chunks.map((c) => kb.chunkById.get(c.id)).filter(Boolean)
-      // The local engine's explanation of itself does not belong in a letter; the model's note on what is missing does.
-      result.email = draftEmail({ question, campus, campusName, missing_info: engine === 'model' ? result.missing_info : '', context })
+      // The retrieved passages in rank order, each with its score, so the letter names only pages that are relevant.
+      const context = result.trace.chunks.filter((c) => kb.chunkById.has(c.id)).map((c) => ({ ...kb.chunkById.get(c.id), rerank_score: c.rerank_score }))
+      // Staff read English: the letter quotes the English rendering of a Chinese question when retrieval made one.
+      const question_en = result.trace.translated_from ? result.trace.query : null
+      result.email = draftEmail({ question, question_en, campusName, context })
     }
     logRun({
       source: req.get('x-cairn-source') === 'eval' ? 'eval' : 'web', question, campus: campus ?? null, engine, status: result.status, model_status: result.model_status,
