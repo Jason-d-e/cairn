@@ -2,9 +2,9 @@
 
 A desk that answers questions from an organisation's own published rules and quotes them word for word. Ask in English or Chinese; the answer names the page, gives the bottom line with its deadline, and the server checks every quote against the page before you see it.
 
-[![The Cairn cover drawn in text characters: the name in block letters, a stack of stones, and the line “Ask, and get the sentence itself.” One shape then becomes a button, a loader, an answer card, campus tabs and a chart. Opens the demo video.](media/opening.webp)](https://youtu.be/TublJChhsB4)
+[![The Cairn cover drawn in text characters: the name in block letters, a stack of stones, and the line “Ask, and get the sentence itself.” One shape then becomes a button, a loader, an answer card, campus tabs and a chart. Opens the demo video.](media/opening.webp)](https://youtu.be/0OJ8MqxsqYE)
 
-Demo video (2 min 22 s): https://youtu.be/TublJChhsB4
+Demo video (2 min 25 s): https://youtu.be/0OJ8MqxsqYE
 
 This instance holds **Monash University's public pages for students**: extensions and special consideration, deferred and supplementary assessments, eExams, withdrawing, intermission and fees, census and principal dates, and Disability Support Services, for the Australian, Malaysian and Indonesian campuses. You pick your campus first, then ask.
 
