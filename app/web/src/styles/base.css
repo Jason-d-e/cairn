@@ -1,3 +1,4 @@
+/* Hallmark · base layer of the Refract theme · the full stamp is at the top of styles.css */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { overflow-x: clip; }
 html { scrollbar-color: var(--color-muted) var(--color-paper); scroll-padding-top: var(--space-3xl); }
