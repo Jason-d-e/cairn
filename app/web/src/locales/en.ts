@@ -7,8 +7,9 @@ const en = {
     menu: 'Pages',
     scheme: { toDark: 'Switch to the black colourway', toLight: 'Switch to the off-white colourway' },
     nav: { desk: 'Desk', library: 'Library', quality: 'Evaluation', about: 'About' },
-    model: { checking: 'Checking the model…', connected: 'Model connected', offline: 'Model not configured', unreachable: 'Server unreachable', demo: 'Static demo' },
-    caveat: 'Every quote is checked word for word against its Monash page. Rules change: read the page, or ask Monash Connect, before you act.',
+    model: { checking: 'Checking the model…', connected: 'Model connected', offline: 'Model not configured', unreachable: 'Server unreachable' },
+    caveat: 'Unofficial, not affiliated with Monash University · Check the linked page before you act ·',
+    caveatStatic: 'Answers recorded on 10 November 2026 · Unofficial, not affiliated with Monash University ·',
     about: 'About Cairn',
     license: 'Unofficial. Not affiliated with Monash University. Page text © Monash University, quoted in short excerpts with a link to each page.',
   },
@@ -24,7 +25,6 @@ const en = {
   desk: {
     title: 'Ask the rules',
     lead: 'Pick your campus, then ask in English or Chinese. The answer names the Monash page and quotes it word for word.',
-    demoLead: 'Static demo: every question below was answered by the real system on 10 November 2026, for the campus shown. To ask your own, run Cairn on your machine (see the README).',
     label: 'Your question',
     placeholder: 'For example: can I defer my exam if I was sick on the day?',
     ask: 'Ask',
@@ -74,7 +74,7 @@ const en = {
     },
     facts: 'Key facts',
     errors: {
-      static_demo: 'This static demo cannot answer new questions. Pick one of the answered questions, or run Cairn on your machine (see the README).',
+      static_demo: 'The online demo answers the questions listed above. To ask your own, run Cairn on your computer; the README has the steps.',
       model_not_configured: 'The model is not configured. Add the key to app/.env and restart the server.',
       model_auth_failed: 'The model service rejected the key. Check app/.env.',
       network: 'Could not reach the server.',
@@ -175,11 +175,11 @@ const en = {
         { title: 'Translate', text: 'A Chinese question is first rendered in English by Claude Haiku 5.5 (one small call), because the pages are English; the search and the rerank then work in one language. The answer is still written in Chinese.' },
       ],
     },
-    note: 'Measured on {{date}} on this corpus with scripts/eval-retrieval.js. These are retrieval figures: whether the right page was found, not whether the written answer was right.',
+    note: 'Measured on {{date}} on this corpus with scripts/eval-retrieval.js.',
     empty: 'No evaluation has been run yet.',
   },
   cover: {
-    banner: 'Source: Monash University student pages, read {{commit}} · {{docs}} pages · {{chunks}} passages · unofficial',
+    banner: 'Source: Monash University student pages, read {{commit}} · {{docs}} pages · {{chunks}} passages',
     bannerLabel: 'The source text',
     nav: { what: 'The words', how: 'How answers are made', library: 'Library', start: 'Open the desk' },
     hero: {
@@ -260,7 +260,7 @@ const en = {
     },
     footer: {
       colophon: 'Cairn is an entry to LaunchPad Hacks 2026 by Jason Liang and ZIzi821.',
-      notice: 'Unofficial. Not affiliated with Monash University. Page text © Monash University, quoted in short excerpts with a link to each page; the pages are not redistributed. Check the page, or ask Monash Connect, before you rely on an answer.',
+      notice: 'Unofficial, not affiliated with Monash University. Page text © Monash University, quoted in short excerpts with a link to each page.',
       cols: { desk: 'Desk', library: 'Library', project: 'Project' },
       links: {
         ask: 'Ask a question',
@@ -287,6 +287,7 @@ const en = {
       { title: 'Limits', text: 'The library holds these 58 pages and nothing else: no unit guides, no faculty rules, no personal records. A quote can be exact and an answer still wrong, so read the page. The evaluation measures retrieval (was the right page found), not the written answers, and its 45 questions were written by the team.' },
       { title: 'Team', text: 'Jason Liang and ZIzi821.' },
     ],
+    staticDemo: { title: 'This online demo', text: 'This version runs without a server. It replays 28 answers recorded on 10 November 2026: fourteen questions, each answered by both engines for the campus shown. A question that was not recorded needs Cairn running on your own computer; the README has the steps.' },
     source: 'Source on GitHub',
     monash: 'Monash students site',
   },

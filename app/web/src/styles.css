@@ -122,7 +122,7 @@ p { margin: 0; text-wrap: pretty; }
 .cn-askcard .cn-field { min-height: 48px; border-radius: var(--radius-inner); }
 .cn-examples { display: grid; gap: var(--space-xs); }
 .cn-examples ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.cn-caveat { max-width: 72ch; }
+.cn-caveat { max-width: 100%; }
 .cn-busy { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-md) 0; color: var(--color-ink-2); }
 /* First visit: what can be asked and how an answer reads, in the place the answer will take. */
 .cn-intro { padding: var(--space-lg) var(--space-xl); display: grid; gap: var(--space-sm); justify-items: start; max-width: 72ch; }

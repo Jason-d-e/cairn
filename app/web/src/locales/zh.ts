@@ -9,8 +9,9 @@ const zh: typeof en = {
     menu: '页面',
     scheme: { toDark: '切换到黑色配色', toLight: '切换到米白配色' },
     nav: { desk: '问答台', library: '资料库', quality: '检索评测', about: '关于' },
-    model: { checking: '正在检查模型…', connected: '模型已连接', offline: '模型未配置', unreachable: '无法连接服务器', demo: '静态演示版' },
-    caveat: '每条引文都和 Monash 原页逐字核对过。规定会变：行动前请阅读原页，或向 Monash Connect 确认。',
+    model: { checking: '正在检查模型…', connected: '模型已连接', offline: '模型未配置', unreachable: '无法连接服务器' },
+    caveat: '非官方，与 Monash University 无关 · 行动前请看一眼所链接的原页 ·',
+    caveatStatic: '回答录于 2026 年 11 月 10 日 · 非官方，与 Monash University 无关 ·',
     about: '关于 Cairn',
     license: '非官方，与 Monash University 无关。页面文字版权归 Monash University，仅作短句摘录并附原页链接。',
   },
@@ -26,7 +27,6 @@ const zh: typeof en = {
   desk: {
     title: '问规定',
     lead: '先选校区，再用中文或英文提问。回答会点名 Monash 的页面，并逐字引用原句。',
-    demoLead: '静态演示版：下面每个问题都是 2026 年 11 月 10 日真实系统按所示校区的回答。要现场提问，请按 README 在自己电脑上运行。',
     label: '你的问题',
     placeholder: '例如：考试当天生病没去考，可以申请延期吗？',
     ask: '提问',
@@ -76,7 +76,7 @@ const zh: typeof en = {
     },
     facts: '关键信息',
     errors: {
-      static_demo: '静态演示版不能回答新问题。请选一个已回答的问题，或按 README 在自己电脑上运行。',
+      static_demo: '在线演示回答上面列出的问题。要问自己的问题，请按 README 在自己电脑上运行 Cairn。',
       model_not_configured: '模型未配置。请把密钥写入 app/.env 并重启服务器。',
       model_auth_failed: '模型服务拒绝了密钥，请检查 app/.env。',
       network: '无法连接服务器。',
@@ -177,11 +177,11 @@ const zh: typeof en = {
         { title: '翻译', text: '中文问题先由 Claude Haiku 5.5 译成英文（一次很小的调用），因为页面是英文；检索和重排随后在同一种语言里进行。回答仍用中文写。' },
       ],
     },
-    note: '{{date}} 用 scripts/eval-retrieval.js 在本资料库上测得。这些是检索指标：衡量有没有找到正确页面，不衡量写出的回答对不对。',
+    note: '{{date}} 用 scripts/eval-retrieval.js 在本资料库上测得。',
     empty: '还没有运行过评测。',
   },
   cover: {
-    banner: '资料来源：Monash University 学生页面，{{commit}} 读取 · {{docs}} 个页面 · {{chunks}} 个段落 · 非官方',
+    banner: '资料来源：Monash University 学生页面，{{commit}} 读取 · {{docs}} 个页面 · {{chunks}} 个段落',
     bannerLabel: '资料来源',
     nav: { what: '先认识几个词', how: '回答怎么来', library: '资料库', start: '打开问答台' },
     hero: {
@@ -262,7 +262,7 @@ const zh: typeof en = {
     },
     footer: {
       colophon: 'Cairn 是 Jason Liang 与 ZIzi821 参加 LaunchPad Hacks 2026 的作品。',
-      notice: '非官方，与 Monash University 无关。页面文字版权归 Monash University，仅作短句摘录并附原页链接；页面本身不随代码分发。采用前请阅读原页，或向 Monash Connect 确认。',
+      notice: '非官方，与 Monash University 无关。页面文字版权归 Monash University，仅作短句摘录并附原页链接。',
       cols: { desk: '问答台', library: '资料库', project: '项目' },
       links: {
         ask: '提问',
@@ -289,6 +289,7 @@ const zh: typeof en = {
       { title: '局限', text: '资料库只有这 58 个页面，别无其他：没有单元指南、没有院系规定、没有个人记录。引文可以一字不差而回答仍然有误，所以请阅读原页。评测衡量的是检索（有没有找到正确页面），不是写出的回答，而且 45 个问题由团队自行撰写。' },
       { title: '团队', text: 'Jason Liang 与 ZIzi821。' },
     ],
+    staticDemo: { title: '这个在线演示', text: '这个版本不需要服务器，重放 2026 年 11 月 10 日录下的 28 条回答：14 道题，两种引擎按所示校区各答一遍。没有录过的问题，要在自己电脑上运行 Cairn 才能回答，步骤见 README。' },
     source: 'GitHub 源码',
     monash: 'Monash 学生网站',
   },

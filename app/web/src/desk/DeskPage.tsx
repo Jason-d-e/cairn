@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Loader, TextInput } from '@mantine/core'
-import { IconAlertTriangle, IconArrowRight } from '@tabler/icons-react'
+import { IconAlertTriangle, IconArrowRight, IconInfoCircle } from '@tabler/icons-react'
 import Shell from '../components/Shell'
 import CampusPicker from '../components/CampusPicker'
 import EngineSwitch from '../components/EngineSwitch'
@@ -133,11 +133,11 @@ export default function DeskPage({ active }: { active: boolean }) {
   }
 
   return (
-    <Shell page="desk">
+    <Shell page="desk" foot={false}>
       <div className="cn-desk">
         <section className="cn-ask" aria-labelledby="desk-title">
           <h1 id="desk-title" className="cn-h1">{t('desk.title')}</h1>
-          <p className="lead">{t(IS_STATIC ? 'desk.demoLead' : 'desk.lead')}</p>
+          <p className="lead">{t('desk.lead')}</p>
           <form className="cn-card cn-askcard" onSubmit={submit}>
             <CampusPicker value={campus} onChange={chooseCampus} name="campus-desk" hint={!campus} />
             <EngineSwitch value={engine} onChange={chooseEngine} name="engine-desk" available={available} hint={!result} />
@@ -174,8 +174,9 @@ export default function DeskPage({ active }: { active: boolean }) {
               ))}
             </ul>
           </div>
+          {/* The one line of fine print on this screen, where mature assistants put it: under the box you type in. */}
           <p className="small cn-caveat">
-            {t('app.caveat')} <a href="#/about" className="cn-link">{t('app.about')}</a>
+            {t(IS_STATIC ? 'app.caveatStatic' : 'app.caveat')} <a href="#/about" className="cn-link">{t('app.about')}</a>
           </p>
         </section>
 
@@ -189,7 +190,11 @@ export default function DeskPage({ active }: { active: boolean }) {
             </p>
           )}
           {error && !busy && (
-            <Alert color="red" icon={<IconAlertTriangle aria-hidden />} title={t(`desk.errors.${error}`, { defaultValue: t('desk.errors.generic') })}>
+            <Alert
+              color={error === 'static_demo' ? 'gray' : 'red'}
+              icon={error === 'static_demo' ? <IconInfoCircle aria-hidden /> : <IconAlertTriangle aria-hidden />}
+              title={t(`desk.errors.${error}`, { defaultValue: t('desk.errors.generic') })}
+            >
               {error !== 'static_demo' && (
                 <Button variant="default" size="sm" mt="sm" onClick={() => void ask(asked, getCampus(), engine)}>
                   {t('desk.errors.retry')}

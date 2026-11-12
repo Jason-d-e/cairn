@@ -27,12 +27,13 @@ const NAV: { page: Page; href: string }[] = [
   { page: 'about', href: '#/about' },
 ]
 
-/** The app screens' chrome: a bar with the wordmark, the four pages, the model state and the two switches. */
-export default function Shell({ page, children }: { page: Page; children: ReactNode }) {
+/** The app screens' chrome: a bar with the wordmark, the four pages, the model state and the two switches.
+ *  The fine print is one quiet line per screen: in this footer, or under the question box on the desk. */
+export default function Shell({ page, children, foot = true }: { page: Page; children: ReactNode; foot?: boolean }) {
   const { t } = useTranslation()
   const { status, error } = useStatus()
   const [open, setOpen] = useState(false)
-  const model = IS_STATIC ? 'demo' : error ? 'unreachable' : !status ? 'checking' : status.model_configured ? 'connected' : 'offline'
+  const model = IS_STATIC ? null : error ? 'unreachable' : !status ? 'checking' : status.model_configured ? 'connected' : 'offline'
 
   return (
     <div className="cn-app">
@@ -47,7 +48,7 @@ export default function Shell({ page, children }: { page: Page; children: ReactN
             ))}
           </nav>
           <div className="cn-bar-right">
-            {model !== 'checking' && (
+            {model && model !== 'checking' && (
               <span className="cn-model" data-state={model}>
                 {t(`app.model.${model}`)}
               </span>
@@ -69,12 +70,14 @@ export default function Shell({ page, children }: { page: Page; children: ReactN
         </div>
       </header>
       <main className="container cn-main">{children}</main>
-      <footer className="container cn-foot">
-        <p className="small">
-          {t('app.license')}{' '}
-          <a href="#/about" className="cn-link">{t('app.about')}</a>
-        </p>
-      </footer>
+      {foot && (
+        <footer className="container cn-foot">
+          <p className="small">
+            {t('app.license')}{' '}
+            <a href="#/about" className="cn-link">{t('app.about')}</a>
+          </p>
+        </footer>
+      )}
     </div>
   )
 }

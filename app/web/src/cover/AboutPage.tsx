@@ -1,13 +1,16 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import Shell from '../components/Shell'
+import { IS_STATIC } from '../api'
 
 import { MONASH_STUDENTS, REPO } from '../links'
 
 /** Where the fine print lives, as in mature products: one page, linked from the footers, never a banner on every screen. */
 export default function AboutPage() {
   const { t } = useTranslation()
-  const sections = t('about.sections', { returnObjects: true }) as { title: string; text: string }[]
+  const all = t('about.sections', { returnObjects: true }) as { title: string; text: string }[]
+  // The online demo says what it is here, once, instead of in a badge or a banner.
+  const sections = IS_STATIC ? [all[0], t('about.staticDemo', { returnObjects: true }) as { title: string; text: string }, ...all.slice(1)] : all
 
   useEffect(() => {
     document.title = `${t('about.title')} · Cairn`

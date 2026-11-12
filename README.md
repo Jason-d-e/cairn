@@ -8,11 +8,9 @@ Demo video (2 min 25 s): https://youtu.be/0OJ8MqxsqYE
 
 This instance holds **Monash University's public pages for students**: extensions and special consideration, deferred and supplementary assessments, eExams, withdrawing, intermission and fees, census and principal dates, and Disability Support Services, for the Australian, Malaysian and Indonesian campuses. You pick your campus first, then ask.
 
-Cairn is **unofficial**: not affiliated with, endorsed by or maintained by Monash University. Rules change; read the linked page, or ask Monash Connect, before you act on an answer.
-
 An entry to LaunchPad Hacks 2026 by Jason Liang and ZIzi821.
 
-**Static demo:** https://jason-d-e.github.io/cairn/ shows the cover, the library, the evaluation and fourteen real answers recorded on 10 November 2026. It has no server, so it cannot answer new questions; to ask your own, run Cairn on your machine (below).
+**Online demo:** https://jason-d-e.github.io/cairn/ shows the cover, the library, the evaluation and fourteen real answers recorded on 10 November 2026. To ask your own question, run Cairn on your machine (below).
 
 ## What it does
 
@@ -129,5 +127,5 @@ Requests are limited to 20 per minute per address. Questions, their campus and s
 
 ## Notices
 
-- Page text © Monash University, quoted in short excerpts with a link to each page; the pages are not redistributed. Cairn is not affiliated with Monash University.
+- Page text © Monash University, quoted in short excerpts with a link to each page; the pages are not redistributed. Cairn is unofficial and not affiliated with, endorsed by or maintained by Monash University. Rules change: read the linked page, or ask Monash Connect, before you act on an answer.
 - Models, libraries, fonts and design guidance are listed with versions and licences in `THIRD_PARTY_NOTICES.md`.
