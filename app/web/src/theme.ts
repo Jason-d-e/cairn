@@ -1,5 +1,5 @@
 import {
-  ActionIcon, Alert, Button, Checkbox, createTheme, Input, Loader, Menu, SegmentedControl, Tooltip,
+  ActionIcon, Alert, Button, Checkbox, createTheme, Input, InputWrapper, Loader, Menu, SegmentedControl, Tooltip,
   type CSSVariablesResolver, type MantineColorsTuple,
 } from '@mantine/core'
 
@@ -70,6 +70,8 @@ export const theme = createTheme({
     Button: Button.extend({
       defaultProps: { radius: 'xl' },
       classNames: { root: 'cn-press' },
+      // 500 is the heaviest weight index.html loads; Mantine's default 600 was drawn at 500 anyway.
+      styles: { label: { fontWeight: 500 } },
       vars: (_theme, props) => {
         const variant = props.variant ?? 'filled'
         if (variant === 'filled') return { root: { '--button-bg': 'var(--color-accent)', '--button-hover': 'var(--color-accent-hi)', '--button-color': 'var(--color-accent-ink)', '--button-bd': '0' } }
@@ -91,6 +93,7 @@ export const theme = createTheme({
     }),
     // Fields are white wells with a 1px edge and a soft focus ring (styles.css; inline styles would hide the ring).
     Input: Input.extend({ classNames: { input: 'cn-field' } }),
+    InputWrapper: InputWrapper.extend({ styles: { label: { fontWeight: 500 } } }),
     Checkbox: Checkbox.extend({ defaultProps: { color: 'pool', radius: 'xs' }, classNames: { input: 'cn-check' } }),
     // A choice of two to four: a clear pill, the chosen segment white inside a thin accent ring.
     SegmentedControl: SegmentedControl.extend({ defaultProps: { radius: 'xl' }, classNames: { root: 'cn-cells', indicator: 'cn-cells-on', label: 'cn-cells-label', control: 'cn-cells-cell' } }),

@@ -33,7 +33,8 @@ export default function LibraryPage() {
   const topicName = (topic: string) => t(`library.topics.${topic}`, { defaultValue: lib?.meta.topics?.[topic] ?? topic })
   const campusName = (c: string) => t(`campus.names.${c}`, { defaultValue: c })
   const locale = i18n.language === 'zh' ? 'zh-CN' : 'en-GB'
-  const fmt = (iso: string) => new Date(iso).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' })
+  // Chinese dates get a space between digits and 年月日, as the rest of the copy does (chinese-copywriting-guidelines).
+  const fmt = (iso: string) => new Date(iso).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' }).replace(/(\d)([年月日])/g, '$1 $2').replace(/([年月])(\d)/g, '$1 $2')
 
   return (
     <Shell page="library">
